@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Score</title>
+    <link rel="stylesheet" href="/q/commons.css">
     <style>
+        /** base */
+
         :root {
             --font-family: sans-serif;
             --font-size-base: 1rem;
@@ -69,7 +72,7 @@
 <body>
     <?php
     if ($_SERVER['REQUEST_METHOD'] != "POST") {
-        echo "<div class='error'>🚫 Please do not attempt to view a score illegitimately.</div>";
+        echo "<div class='error'>Please do not attempt to view a score illegitimately.</div>";
         die(1);
     }
 
@@ -83,9 +86,10 @@
     }
 
     echo "
-    <div class='score-card'>
-        <h1>Your Score</h1>
-        <div class='score'>$score / 10</div>
+    <div data-preset='card' class='score-card'>
+        <h1 class='card-title'>Your Score</h1>
+        <div class='card-body score'>$score / 10</div>
+        <div class='card-footer-notice'>Note that this is not an official quiz</div>
     </div>";
     ?>
 </body>
