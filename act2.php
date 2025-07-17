@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <link href="/q/commons.css"> -->
     <style>
         :root {
             --font-family: sans-serif;
@@ -40,6 +39,8 @@
         }
 
         form {
+            display: flex;
+            flex-direction: column;
             max-width: var(--max-width);
             margin: 40px auto;
             padding: var(--padding-form);
@@ -52,6 +53,19 @@
             margin-bottom: var(--spacing-question);
             padding-bottom: 16px;
             border-bottom: 1px solid var(--color-border);
+        }
+
+        .qf_question_tile.qf_question_text_variant {
+          display: flex;
+          flex-direction: row; /** one line */
+        }
+
+        .qf_question_tile.qf_question_text_variant label::after {
+          content: ':';
+        }
+
+        .qf_question_tile.qf_question_text_variant input{
+          font-size: 0.85rem;
         }
 
         .qt_label {
@@ -68,10 +82,12 @@
         input[type="radio"] {
             accent-color: var(--color-accent);
             appearance: none;
+            transform: scale(1.5);
         }
 
         input[type="radio"]::before {
             content: '🔘';
+            /* font-size: 20px; */
         }
 
         input[type="radio"]:checked::before {
@@ -122,7 +138,7 @@
 </head>
 
 <body>
-    <form action="/q/score" method="POST">
+    <form action="/quejada/score" method="POST">
         <?php
 
         // dynamically generate question elements
@@ -224,15 +240,17 @@
 
         // generate the form fields
         $i = 1; // question counter
-        
+
+        echo "<div class='qf_question_tile qf_question_text_variant'><label for='uname' class='qt_label'>Your name</label><input type='text' name='uname' required></div>"; // user name
+
         foreach ($questions as $q) {
             $c = 1; // choice counter
             echo "<div class='qf_question_tile' id='qw_$i'>"; // opening: div
             echo "<label for='q$i' class='qt_label'>" . $q["question"] . "</label>"; // question tile label
-            echo "<br>";
+            // echo "<br>";
 
             foreach ($q["choices"] as $p) {
-                echo "<input type='radio' name='q$i' value='$c' id='q$i\_$c'>"; // records which client picks, value is gonna be nth choice
+                echo "<input type='radio' name='q$i' value='$c' id='q$i\_$c' required>"; // records which client picks, value is gonna be nth choice
                 echo "<label for='q$i\_$c'>" . $p . "</label>";
 
                 echo "<br>";

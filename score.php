@@ -5,10 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Score</title>
-    <link rel="stylesheet" href="/q/commons.css">
+    <link rel="stylesheet" href="/quejada/commons.css">
     <style>
-        /** base */
-
         :root {
             --font-family: sans-serif;
             --font-size-base: 1rem;
@@ -85,9 +83,11 @@
         }
     }
 
+    $name = $_POST['uname'];
+
     echo "
     <div data-preset='card' class='score-card'>
-        <h1 class='card-title'>Your Score</h1>
+        <h1 class='card-title'>Your Score ($name)</h1>
         <div class='card-body score'>$score / 10</div>
         <div class='card-footer-notice'>Note that this is not an official quiz</div>
     </div>";
