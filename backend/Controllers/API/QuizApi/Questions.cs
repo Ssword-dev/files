@@ -10,7 +10,7 @@ public class QuizApiQuestionsController(QuizAppDatabaseContext db) : QuizApiComm
     [HttpGet("questions/{id}")]
     public async Task<IActionResult> GetQuestions(string id)
     {
-        var questions = await GetQuestionsById(id);
+        var questions = await Context.GetQuestionsById(id);
 
         if (questions == null)
         {

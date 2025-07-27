@@ -13,7 +13,7 @@ public class QuizApiReaderController(QuizAppDatabaseContext database) : QuizApiC
     public async Task<OkObjectResult> Get(string tag)
     {
         return Ok(
-            await GetAllQuizzesWithTag(tag)
+            await Context.GetAllQuizzesWithTagAsync(tag)
         );
     }
 }

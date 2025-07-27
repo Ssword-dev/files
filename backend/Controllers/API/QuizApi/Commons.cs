@@ -12,7 +12,7 @@ public enum QuizObjectCreationErrorCode
     RecordAlreadyExist,
 }
 
-public class QuizApiCommonController(QuizAppDatabaseContext database) : ControllerBase
+public class QuizApiCommonController(QuizAppDatabaseContext context) : ControllerBase
 {
-    private readonly QuizAppDatabaseContext _db = database;
+    public QuizAppDatabaseContext Context = context;
 }

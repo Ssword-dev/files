@@ -1,7 +1,6 @@
 using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace Backend.Controllers.Api.QuizApi;
 
@@ -21,11 +20,11 @@ public class QuizApiCreationController(QuizAppDatabaseContext database) : QuizAp
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] QuizCreateRequest request)
     {
-        var quiz = await QuizObject(
+        var quiz = await Context.QuizEntity(
             request.Publisher,
             request.Title,
             request.Tags,
-            Guid.NewGuid().ToString(),
+            Guid.NewGuid(),
             request.Questions
         );
 

@@ -16,19 +16,22 @@ namespace Backend.Database
         [Column("id", TypeName = "binary(16)")]
         public Guid UniqueId { get; set; }
 
-        [Column("publisher")]
+        [Column("publisher", TypeName = "longtext")]
         public required string Publisher { get; set; }
-        [Column("title")]
+
+        [Column("title", TypeName = "longtext")]
         public required string Title { get; set; }
     }
 
     [Table("tags")]
     public class QuizTagEntity
     {
+        [Key]
         [Column("id")]
         public required Guid Id { get; set; }
 
         [Column("name")]
+        [StringLength(45)]
         public required string Name { get; set; }
     }
 
@@ -36,7 +39,8 @@ namespace Backend.Database
     public class QuizTagRelationEntity
     {
         [Column("id")]
-        public Guid OwnerQuestionId { get; set; }
+        public Guid OwnerQuizId { get; set; }
+
         [Column("tag_id")]
         public Guid TagId { get; set; }
     }
