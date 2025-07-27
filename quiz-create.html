@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-no-browser-semantics>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body class="flex items-center justify-center">
+    <form
+      data-preset="card content-frame"
+      class="min-w-40 w-4/5 max-w-80 min-h-20 max-h-80 sm:aspect-[2/3] aspect-[4/3] border-black"
+    >
+      <div class="card-title">Create a Quiz</div>
+      <div class="flex">
+        <div data-preset="clones-material-input-wrapper" class="mt-6 w-full">
+          <input placeholder=" " type="text" id="input-text" />
+          <label for="input-text"> Text </label>
+        </div>
+      </div>
+      <div class="card-button-tray">
+        <button data-preset="button" class="mb-2 relative">
+          Add Question
+          <span data-preset="ribbon" class="bg-gray-300">Act!</span>
+        </button>
+        <button data-preset="button" class="mb-2">Reset</button>
+      </div>
+      <!-- 
+        in a real site, there is gonna be notices everywhere. 
+        primarily to offset the content hosted in the site.
+        (like google forms)
+        so this is a tiny notice here.
+        -->
+      <div class="card-footer-notice">
+        The site owner does not claim ownership or responsibility for
+        user-submitted content.
+      </div>
+    </form>
+
+    <!-- Dialog card -->
+    <div data-preset="card" class="absolute" hidden></div>
+  </body>
+  <!-- 
+  (EN)
+  This script is internal because external javascript
+  will be harder to develop with. especially because no
+  react.js so the elements dont describe themselves.
+  so putting this here improves readability (i hope. because
+  the script describes what it does to the body) and
+  is easier to develop with.
+
+  (TL-PH / Tagalog)
+  Itong script ay nasa loob ng file (internal) dahil
+  mas mahirap mag-develop gamit ang external javascript.
+  Lalo na’t walang React.js, kaya ang mga elemento
+  ay hindi kayang i-describe ang sarili nila.
+  Kaya nilagay ito rito para mas maging malinaw basahin
+  (sana nga) dahil nakasaad dito kung ano ang ginagawa
+  ng script sa body ng page, at mas madali
+  itong i-develop.
+
+  -->
+
+  <script></script>
+  <script src="./commons/commons.js"></script>
+  <script src="./hot-reload-client.js"></script>
+</html>

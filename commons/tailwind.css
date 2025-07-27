@@ -1,0 +1,30 @@
+/*
+
+(EN)
+This file contains tailwind css source code
+that needs to be transpiled via the tailwindcss
+command line interface (CLI). it links the
+custom base styles, and the custom components
+styles with tailwind's own components and utility
+classes.
+
+tailwind is a utility-first framework used in some
+parts of this project (mostly to customize the generic
+custom components i made).
+
+(TL-PH / Tagalog)
+Ang file na ito ay naglalaman ng source code
+para sa Tailwind CSS na kailangang i-transpile
+gamit ang Tailwind CSS command-line interface (CLI).
+Kinokonekta nito ang sariling base styles at
+custom component styles sa mga built-in na
+component at utility classes ng Tailwind.
+
+Ginagamit ang Tailwind bilang utility-first na framework
+sa ilang parte ng proyektong ito (karaniwan sa mga
+custom component na ginawa ko para maging mas madali
+itong i-customize).
+*/
+@import "tailwindcss";
+@import "./base.css";
+@import "./components.css";

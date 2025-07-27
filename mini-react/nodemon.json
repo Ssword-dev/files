@@ -1,0 +1,5 @@
+{
+  "watch": ["."],
+  "ext": "ts,tsx",
+  "exec": "yarn tsx src/debug.ts"
+}

@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug: yarn tsx",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": [
+        "tsx"
+      ],
+      "args": [
+        "src/debug.ts"
+      ], // or whatever entry file
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "smartStep": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    }
+  ]
+}

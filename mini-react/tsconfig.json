@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // language features
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": [
+      "DOM",
+      "ES2020"
+    ],
+    // strictness
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    // module resolution
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    // dev-only: no output
+    "noEmit": true,
+    // convenience
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

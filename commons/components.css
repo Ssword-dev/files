@@ -1,0 +1,187 @@
+@import "./theme.css";
+@import "./properties.css";
+
+/*
+(En)
+This file contains components/presets that
+elements can have. using the data-preset attribute,
+an element can choose to take on a preset if it is
+eligible for such preset. (e.g: a div and a button can
+have "button" as one of its preset, as  a generic element
+and a real button makes sense to be a button)
+
+*/
+
+@layer components {
+  [data-preset~="card"] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: calc(var(--card-initial-border));
+    box-shadow: 0 4px 8px var(--color-card-shadow);
+    transition: 0.5s box-shadow ease;
+    height: 16rem;
+    width: 20rem;
+    padding: 1rem;
+  }
+
+  [data-preset~="card"]:has(.card-fill) {
+    overflow-y: hidden;
+  }
+
+  [data-preset~="card"] .card-title {
+    margin-top: 8px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    align-self: center;
+  }
+
+  [data-preset~="card"] .card-body {
+    font-size: 0.9rem;
+    font-weight: 100;
+    margin: 4px;
+  }
+
+  [data-preset~="card"] .card-footer-notice {
+    display: flex;
+    justify-self: left; /** embed left */
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    font-weight: 100;
+    margin: 4px;
+  }
+
+  [data-preset~="card"]:hover {
+    border-radius: calc(var(--card-initial-border) + 4px);
+    box-shadow: 0 8px 16px var(--color-card-shadow);
+    transition: 0.5s box-shadow ease;
+  }
+
+  /* TODO: This card-fill thing is wip. will apply to button instead */
+  [data-preset~="card"] .card-fill {
+    position: absolute; /** remove this from document flow */
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    background-color: blue;
+    z-index: -999;
+    pointer-events: none;
+    transition: top 2s ease;
+  }
+
+  [data-preset~="card"]:hover .card-fill {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    transition: top 2s ease;
+    transition-delay: 85ms; /** A small transition delay helps to make it more natural */
+  }
+
+  [data-preset~="card"] .card-button-tray {
+    margin-top: auto;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center; /* Center it as much as possible */
+    gap: 0.3rem;
+  }
+
+  /* Component: Button */
+  :is(div, button)[data-preset="button"] {
+    background-color: var(--btn-bg);
+    color: var(--btn-fg);
+    border-radius: 8px;
+    height: 2.5rem;
+    min-height: 2rem;
+    width: 8rem;
+  }
+
+  /* Feat: Button User Feedback (haha, dopamine!) */
+  :is(div, button)[data-preset="button"]:hover {
+    background-color: var(--btn-bg-hover);
+    transition: background-color 0.5s ease;
+  }
+
+  :is(div, button)[data-preset="button"]:active {
+    background-color: var(--btn-bg-clicked);
+    transform: scale(0.98);
+    transition: background-color 0.5s ease transform 0.5s ease;
+  }
+
+  /* content-frame */
+  /* A frame that takes up the full space of its parent*/
+  [data-preset~="content-frame"] {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--frame-border);
+    border-radius: var(--base-border-radius);
+  }
+
+  [data-preset~="skeleton"] {
+    background-color: var(--skeleton-bg);
+  }
+
+  [data-preset~="ribbon"] {
+    position: absolute;
+    top: -0.5rem;
+    right: -1.2rem;
+    transform: rotate(25deg);
+    font-size: var(--font-base);
+    width: calc(var(--font-base) * 4);
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+    border-radius: 999px;
+    background-color: var(--ribbon-bg, crimson);
+    color: var(--ribbon-fg, white);
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  div[data-preset~="clones-material-input-wrapper"] {
+    position: relative;
+  }
+
+  div[data-preset~="clones-material-input-wrapper"] input {
+    width: 100%;
+    border-bottom-width: 2px;
+    border-color: var(--x-material-input-fg);
+    background-color: transparent;
+    color: var(--x-material-input-fg);
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    outline: none;
+  }
+
+  div[data-preset~="clones-material-input-wrapper"] input + label {
+    position: absolute;
+    left: 0.5rem;
+    top: 0.25rem;
+    font-size: 0.875rem;
+    transition: all 200ms ease;
+  }
+
+  div[data-preset~="clones-material-input-wrapper"]
+    input:placeholder-shown
+    + label {
+    top: 1.25rem;
+    font-size: var(--font-base);
+    color: var(--x-material-input-fg);
+  }
+
+  div[data-preset~="clones-material-input-wrapper"] input:focus + label {
+    /* peer-placeholder-shown:top-5
+         peer-placeholder-shown:text-base
+          peer-placeholder-shown:text-gray-400
+           peer-focus:top-1 
+           peer-focus:text-sm 
+           peer-focus:text-blue-400 */
+    top: 0.25rem;
+    font-size: var(--font-sm);
+    color: var(--x-material-input-accent);
+  }
+}

@@ -1,0 +1,56 @@
+/*
+
+(EN)
+This file contains the configuration for the
+components. mostly used as the base or default styles.
+to customize how they look, i use tailwind to
+apply utility classes to override the styles here.
+
+(TL-PH / Tagalog)
+Ang file na ito ay naglalaman ng configuration
+para sa mga component. Karaniwan itong ginagamit
+bilang base o default na estilo (styles).
+Para i-customize ang itsura nila, ginagamit ko
+ang Tailwind para mag-apply ng utility classes
+na nagsasapaw sa mga style dito.
+
+*/
+:root {
+  /* bases */
+  --base-border-radius: 8px;
+
+  /* backgrounds */
+  --bg-body: oklch(98% 0 0); /* near-white */
+  --bg-surface: oklch(95% 0 0); /* card/panel bg */
+  --bg-hover: oklch(90% 0 0); /* hover highlight */
+
+  /* card */
+  --card-bg: oklch(80% 0 0);
+  --card-border-initial: 8px;
+
+  /* buttons */
+  --btn-bg: oklch(15% 0 0); /* dark neutral (black-like) */
+  --btn-bg-hover: oklch(25% 0 0); /* lighter hover */
+  --btn-bg-clicked: oklch(35% 0 0);
+  --btn-fg: oklch(98% 0 0); /* white text */
+
+  /* frame */
+  --frame-bg: oklch(88% 0 0); /* A bit gray but lighter */
+  --frame-border: oklch(12% 0 0); /* strong border */
+
+  /* skeleton */
+  --skeleton-bg: oklch(50% 0 0);
+
+  /* clone material input */
+  --x-material-input-muted: oklch(70% 0 0);
+  --x-material-input-fg: oklch(30% 0 0);
+  --x-material-input-bg: oklch(80 0 0);
+  --x-material-input-accent: oklch(80% 0.127 208);
+
+  /* text */
+  --text-main: oklch(10% 0 0); /* black-ish */
+  --text-muted: oklch(45% 0 0); /* mid-gray */
+  --text-subtle: oklch(65% 0 0); /* lighter gray */
+
+  --shadow: oklch(0% 0 0 / 0.08); /* soft black shadow */
+}
