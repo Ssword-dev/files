@@ -19,8 +19,8 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
     public static readonly int StandardInsertionLimitBeforeParallelism = 10;
     // Static constants
     // this is the directory of where the exe is located.
-    private static readonly string AssemblyDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
-    private static readonly string RecordsDirectory = Path.Combine(AssemblyDirectory, "questions");
+    public static readonly string AssemblyDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
+    public static readonly string RecordsDirectory = Path.Combine(AssemblyDirectory, "questions");
     public DbSet<DatabaseQuizEntity> Quizzes { get; set; }
     public DbSet<DatabaseQuizTagEntity> QuizTags { get; set; }
     public DbSet<DatabaseQuizTagRelationEntity> QuizTagRelations { get; set; }
@@ -120,22 +120,27 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
         return QuizTags.AnyAsync(tag => tag.Id == id);
     }
 
-    internal async Task CreateTagIfNotExist(string tagName)
+    public async Task<Guid> CreateTagIfNotExist(string tagName)
     {
+        var tagExist = await TagExists(tagName);
 
-        if (!await TagExists(tagName))
+        if (!tagExist)
         {
+            var id = Guid.NewGuid();
             var tag = new DatabaseQuizTagEntity()
             {
-                Id = Guid.NewGuid(),
+                Id = id,
                 Name = tagName
             };
 
-            await QuizTags.AddAsync(tag);
+            QuizTags.Add(tag);
+            return id;
         }
+
+        return await QuizTags.Where(tag => tag.Name == tagName).Select(tag => tag.Id).FirstAsync();
     }
 
-    internal async Task AddTagToQuizId(Guid ownerQuizId, string name)
+    internal async Task AddTagToQuizId(Guid ownerQuizId, Guid tagId)
     {
         var relation = new DatabaseQuizTagRelationEntity()
         {
@@ -146,97 +151,10 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
             // the .First part is just here to tell the ef framework only return
             // a single one. this is guaranteed to be null or Guid but since used,
             // only internally, works.
-            TagId = QuizTags.Where(tag => tag.Name == name).Select(tag => tag.Id).First()
+            TagId = tagId
         };
 
         await QuizTagRelations.AddAsync(relation);
-    }
-
-
-    public async Task<DatabaseQuizEntity> QuizEntity(string publisher, string title, string[] tags, Guid uniqueId, QuestionModel[] questions)
-    {
-        // phase 1: sanity checks
-        if (SystemFile.Exists(QuestionRecord.Resolve(RecordsDirectory, uniqueId.ToString())) || await QuizExists(uniqueId))
-        {
-            throw new Exception("Cannot create a question record, a quiz with the same guid is detected");
-        }
-
-        var record = QuestionRecord.New(uniqueId, questions);
-
-        // save the record
-        await record.SaveAsync(RecordsDirectory);
-
-        // phase 2: the entity creation
-        var entity = new DatabaseQuizEntity()
-        {
-            UniqueId = uniqueId,
-            Publisher = publisher,
-            Title = title,
-        };
-
-        // if the user provides like 10 copies of a tag, then that is just
-        // wait of time to check with ef. so distinct is perf gain!!
-        // kinda... it adds O(n) but useful.
-        var normalizedTagList = tags.Distinct().ToArray();
-
-        // phase 3: Tag insertion
-        if (normalizedTagList.Length <= StandardInsertionLimitBeforeParallelism)
-        {
-            foreach (var tag in tags)
-            {
-                await CreateTagIfNotExist(tag);
-            }
-        }
-
-        // i think this is faster?
-        // it just parallelizes tag creations to
-        // c#'s pool thread.
-        // (well actually the pool thread is also limited but...)
-        // will worry bout that later when it needs that much speed.
-        else
-        {
-            var tasks = new List<Task>(normalizedTagList.Length);
-            foreach (var tag in normalizedTagList)
-            {
-                var task = CreateTagIfNotExist(tag);
-                tasks.Add(task);
-            }
-            await Task.WhenAll(tasks);
-        }
-
-        await SaveChangesAsync();
-
-        // phase 4: relational tag insertion
-        // now the way i will handle this is very similar to previous phases.
-        // but if it needs more speed i can just join phase 3 and 4 together
-        // later.
-
-        if (normalizedTagList.Length <= StandardInsertionLimitBeforeParallelism)
-        {
-            foreach (var tag in normalizedTagList)
-            {
-                await AddTagToQuizId(uniqueId, tag);
-            }
-        }
-
-        else
-        {
-            var tasks = new List<Task>(normalizedTagList.Length);
-            foreach (var tag in normalizedTagList)
-            {
-                var task = AddTagToQuizId(uniqueId, tag);
-                tasks.Add(task);
-            }
-
-            await Task.WhenAll(tasks);
-        }
-
-        // phase 5: add the newly created entity.
-        await AddAsync(entity);
-        await SaveChangesAsync();
-
-        // phase X: return the newly created entity.
-        return entity;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
