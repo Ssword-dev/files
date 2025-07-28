@@ -63,8 +63,8 @@ public class QuizApiCreationController(QuizAppDatabaseContext database) : QuizAp
         // phase 5: create question records
         // this automatically writes to filesystem btw.
         // uses QuestionRecord.Resolve(...)
-        var _ = QuestionRecord.New(id, request.Questions);
-
+        var questionRecord = QuestionRecord.New(id, request.Questions);
+        await questionRecord.SaveAsync(QuizAppDatabaseContext.RecordsDirectory);
         // phase 6: Ok
         return Ok(quiz);
     }

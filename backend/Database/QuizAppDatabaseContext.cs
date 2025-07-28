@@ -20,7 +20,8 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
     // Static constants
     // this is the directory of where the exe is located.
     public static readonly string AssemblyDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
-    public static readonly string RecordsDirectory = Path.Combine(AssemblyDirectory, "questions");
+    public static readonly string CurrentDirectory = Directory.GetCurrentDirectory();
+    public static readonly string RecordsDirectory = Path.Combine(CurrentDirectory, "questions");
     public DbSet<DatabaseQuizEntity> Quizzes { get; set; }
     public DbSet<DatabaseQuizTagEntity> QuizTags { get; set; }
     public DbSet<DatabaseQuizTagRelationEntity> QuizTagRelations { get; set; }
@@ -49,14 +50,22 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
         """, tagId); // this is raw sql statement because doing it in ef is awkward (i know more mysql than ef)
     }
 
-    public List<DatabaseQuizEntity> GetAllQuizzesWithTag(string tagId)
+    public IQueryable<DatabaseQuizEntity> QueryGetAllQuizzesWithTagName(string name)
     {
-        if (!Guid.TryParse(tagId, out var guid))
-        {
-            throw new ArgumentException("Invalid GUID format.");
-        }
+        return Quizzes
+            .FromSqlRaw("""
+            SELECT q.*
+            FROM `quizzes` q
+            JOIN `quiz_tags` qt ON q.id = qt.id
+            JOIN `tags` t ON t.id = qt.tag_id
+            WHERE t.name = {0}
+        """, name); // this is raw sql statement because doing it in ef is awkward (i know more mysql than ef)
+    }
 
-        return QueryGetAllQuizzesWithTag(guid).ToList();
+    public List<DatabaseQuizEntity> GetAllQuizzesWithTag(string name)
+    {
+
+        return QueryGetAllQuizzesWithTagName(name).ToList();
     }
 
     public List<DatabaseQuizEntity> GetAllQuizzesWithTag(Guid tagId)
@@ -65,14 +74,9 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
     }
 
 
-    public async Task<List<DatabaseQuizEntity>> GetAllQuizzesWithTagAsync(string tagId)
+    public async Task<List<DatabaseQuizEntity>> GetAllQuizzesWithTagAsync(string name)
     {
-        if (!Guid.TryParse(tagId, out var guid))
-        {
-            throw new ArgumentException("Invalid GUID format.");
-        }
-
-        return await QueryGetAllQuizzesWithTag(guid).ToListAsync();
+        return await QueryGetAllQuizzesWithTagName(name).ToListAsync();
     }
 
     public async Task<List<DatabaseQuizEntity>> GetAllQuizzesWithTagAsync(Guid tagId)
