@@ -8,7 +8,7 @@ SET time_zone = "+00:00";
 START TRANSACTION; -- Starts a transaction
 
 -- IMPORTANT!!
--- DROP TABLE `tags` FIRST BECAUSE MYSQL WILL ERROR ABOUT
+-- DROP TABLE `quiz_tags` FIRST BECAUSE MYSQL WILL ERROR ABOUT
 -- DELETING THE OTHER 2 TABLES FIRST BECAUSE OF FOREIGN KEY
 -- REFERENCING
 
@@ -22,9 +22,9 @@ START TRANSACTION; -- Starts a transaction
 -- EXISTS - A condition. evaluates to the table existing in the current context.
 -- `<tablename>` - The table name to drop if it exist.
 
-DROP TABLE IF EXISTS `tags`;
 DROP TABLE IF EXISTS `quiz_tags`;
-DROP TABLE IF EXISTS `quizzes`
+DROP TABLE IF EXISTS `tags`;
+DROP TABLE IF EXISTS `quizzes`;
 
 -- Creates a table named quizzes.
 -- source: (esle)
@@ -46,7 +46,7 @@ CREATE TABLE `quizzes` (
 
   -- declares the primary key to be the field `id`
   PRIMARY KEY (`id`)
-);
+)
 -- the ENGINE=InnoDB
 -- sets the mysql engine to InnoDB
 -- the charset is character set. (defines encoding in text)

@@ -22,6 +22,7 @@ public class QuizApiCreationController(QuizAppDatabaseContext database) : QuizAp
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] QuizCreateRequest request)
     {
+        // phase 1: quiz creation
         var id = Guid.NewGuid();
 
         var quiz = new QuizEntity
@@ -33,9 +34,12 @@ public class QuizApiCreationController(QuizAppDatabaseContext database) : QuizAp
 
         Context.Quizzes.Add(quiz);
 
+        // phase 2: tag deduplication
+        var normalizedTags = request.Tags.Distinct();
+
+        // phase 3: tag creation. (if they dont exist.)
         List<Guid> tagIds = [];
 
-        var normalizedTags = request.Tags.Distinct();
 
         foreach (var tag in normalizedTags)
         {
@@ -43,17 +47,25 @@ public class QuizApiCreationController(QuizAppDatabaseContext database) : QuizAp
             tagIds.Add(tid);
         }
 
-        await Context.SaveChangesAsync();
-        Console.WriteLine($"{tagIds}");
+        await Context.SaveChangesAsync(); // <-- this could be optimized if the tags exists.
 
+        // phase 4: relation creations
         foreach (var tagId in tagIds)
         {
-            Console.WriteLine(tagId.ToString());
             await Context.AddTagToQuizId(id, tagId);
         }
 
-        await Context.SaveChangesAsync(); // TODO: When resubmitting. this breaks due to different id stuff.
+        // reminder to self, ef does not pick up guids being
+        // binary(16), be explicit next time
+        await Context.SaveChangesAsync();
 
+
+        // phase 5: create question records
+        // this automatically writes to filesystem btw.
+        // uses QuestionRecord.Resolve(...)
+        var _ = QuestionRecord.New(id, request.Questions);
+
+        // phase 6: Ok
         return Ok(quiz);
     }
 

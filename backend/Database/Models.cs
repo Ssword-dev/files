@@ -27,7 +27,7 @@ namespace Backend.Database
     public class QuizTagEntity
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "binary(16)")]
         public required Guid Id { get; set; }
 
         [Column("name")]
@@ -38,10 +38,10 @@ namespace Backend.Database
     [Table("quiz_tags")]
     public class QuizTagRelationEntity
     {
-        [Column("id")]
+        [Column("id", TypeName = "binary(16)")]
         public Guid OwnerQuizId { get; set; }
 
-        [Column("tag_id")]
+        [Column("tag_id", TypeName = "binary(16)")]
         public Guid TagId { get; set; }
     }
 }
