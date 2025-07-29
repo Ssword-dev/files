@@ -40,6 +40,21 @@
     <!-- Dialog card -->
     <div data-preset="card" class="absolute" hidden></div>
   </body>
+
+  <!-- semantic template groups -->
+  <div class="template-group" id="question-templates" hidden>
+    <template id="question-template-multi-choice">
+      <div class="question-field">
+        <label class="question-label">
+          <!-- Text -->
+        </label>
+        <div class="flex question-choices">
+          <!-- Choices (HTMLInputElement[])-->
+        </div>
+      </div>
+    </template>
+  </div>
+
   <!-- 
   (EN)
   This script is internal because external javascript
@@ -60,8 +75,30 @@
   itong i-develop.
 
   -->
+  <script>
+    const templates = {
+      multi: document.getElementById("question-template-multi-choice"),
+    };
 
-  <script></script>
+    const state = {
+      questions: [], // questions + reflection.
+      current: {
+        index: 0, // question index.
+        type: 0, // multi-choice
+        type_config: {
+          choices: [
+            {
+              value: "A.",
+              reflection: null, // HTMLElement
+            },
+          ],
+        },
+        reflection: null, // HTMLElement
+      },
+    };
+
+    function createElementFromQuestionState(state) {}
+  </script>
   <script src="./commons/commons.js"></script>
   <script src="./hot-reload-client.js"></script>
 </html>
