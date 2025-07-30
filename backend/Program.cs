@@ -1,4 +1,10 @@
 using Backend.ProgramModules;
 
-// Runts the entrypoint. (dw this is just OOP version of normal Program.cs)
-await new Entrypoint().Run();
+sealed class Program
+{
+    public static async Task Main(string[] argv)
+    {
+        var entry = new Entrypoint();
+        await entry.Invoke(argv);
+    }
+}
