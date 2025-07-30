@@ -19,6 +19,7 @@ sealed class ToolCommandGroup : Command
     public override void Init(Command command)
     {
         command.AddSubCommand<HwToolCommand>("hw");
+        command.AddSubCommand<DatabaseBackupTool>("backup");
         base.Init(command);
     }
 
