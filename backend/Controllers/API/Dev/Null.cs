@@ -7,7 +7,13 @@ namespace Backend.Controllers.Api.Dev;
 class NullController : ControllerBase
 {
     [HttpGet]
-    public IActionResult Get()
+    [HttpPost]
+    [HttpPut]
+    [HttpHead]
+    [HttpDelete]
+    [HttpPatch]
+    [HttpOptions]
+    public IActionResult All()
     {
         return Ok(""); // EOF
     }

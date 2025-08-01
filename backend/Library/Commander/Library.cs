@@ -1,5 +1,27 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Library.Commander;
 
+/// <summary>
+/// An object that defines the entrypoint to your programs.
+/// basically i just wired up an argument parser + command lookup in
+/// one "engine". basically minor abstractions, just lets you do
+/// <code>myapp cmd subcommand subcommand2 -short --long</code>
+/// or some other ways to do it depending on your parser. but thats what
+/// the unix one does.
+/// 
+/// like you can think of this as giant tree of trees that can contain trees.
+/// or if you want to go existential, an atom to electrons. it contains electrons or
+/// in this case, trees. but the electrons itself are made of quarks and gluons...
+/// </summary>
+/// <typeparam name="P">
+/// An argument parser that gives meaning to the argument values.
+/// has `.Parse` method that returns an Invocation object
+/// which is the semantic meaning of the arguments.
+///
+/// Basically like us, a bunch of atoms, give meaning to other atoms.
+/// but less deep. because this is an existential thing...
+/// </typeparam>
 public abstract class CommanderProgram<P> where P : ArgumentParserBase, new()
 
 {
@@ -96,6 +118,11 @@ public abstract class CommanderProgram<P> where P : ArgumentParserBase, new()
         await command.Invoke(parsed);
     }
 }
+
+/// <summary>
+/// This is the atomic unit of your program.
+/// controls what to do, and groups subcommands (if any).
+/// </summary>
 public abstract class Command
 {
     internal readonly Dictionary<string, Command> subcommands;
@@ -104,7 +131,9 @@ public abstract class Command
         subcommands = [];
     }
 
-    public Command AddSubCommand<T>(string name) where T : Command, new()
+    public Command AddSubCommand<T>(
+        string name
+        ) where T : Command, new()
     {
         subcommands[name] = new T();
         return this;
