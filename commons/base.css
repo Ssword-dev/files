@@ -1,111 +1,13 @@
-/*
-
-(EN)
-This file contains components/presets that
-elements can have. using the data-preset attribute,
-an element can choose to take on a preset if it is
-eligible for such preset. (e.g: a div and a button can
-have "button" as one of its preset, as  a generic element
-and a real button makes sense to be a button)
-
-(TL-PH / Tagalog)
-Ang file na ito ay naglalaman ng mga preset o components
-na pwedeng gamitin ng mga elemento. gamit ang
-`data-preset` na attribute, pwedeng pumili ang isang
-elemento ng preset kung ito ay akma sa kanya. 
-(halimbawa: ang div at button ay pwedeng gumamit
-ng "button" na preset, dahil kahit generic lang ang div,
-at tunay na button ang isa, pareho silang maaaring
-gamitin bilang button)
-
-*/
 @layer base {
-  :root {
-    --font-base: 0.7rem;
+  textarea {
+    resize: none;
+    overflow-y: hidden;
+    height: max-content;
   }
 
-  * {
-    margin: 0;
-    padding: 0;
-    border-radius: 0;
-
-    /* box-sizing: border-box; */
-  }
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box; /* prevents the weird browser behaviours about widths and heights */
-  }
-
-  ol,
-  ul,
-  a {
-    text-decoration: none; /* Reset */
-  }
-
-  li {
-    display: block; /* makes it easier to control lists */
-  }
-
-  a {
-    color: #000; /* Reset the blue colors thing */
-    text-decoration: none;
-  }
-
-  a:visited {
-    color: inherit;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: normal;
-    font-size: var(--font-base);
-  }
-
-  /* An alternate mode where you can have all semantic browser styles removed */
-  html.no-browser-semantics :is(strong, b, dt) {
-    font-weight: inherit;
-  }
-
-  html.no-browser-semantics :is(i, em) {
-    font-style: normal;
-  }
-
-  html.no-browser-semantics :is(small) {
-    font-size: inherit;
-  }
-
-  html.no-browser-semantics :is(sub, sup) {
-    vertical-align: baseline;
-    font-size: inherit;
-  }
-
-  html.no-browser-semantics :is(pre, kbd, samp, code) {
-    font-family: inherit; /* they normally have monospace here */
-  }
-
-  html.no-browser-semantics caption {
-    caption-side: top;
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-
-  /* Seperate reset for tables because i find it too destructive */
-  html.disable-table-semantics table {
-    display: block;
-  }
-
-  html.disable-table-semantics :is(tr, td, th) {
-    display: block;
-  }
-
-  html.disable-table-semantics th {
-    font-weight: normal; /* Normally it has bold... */
+  /* This should be set explicitly. */
+  input:focus,
+  textarea:focus {
+    outline: none;
   }
 }

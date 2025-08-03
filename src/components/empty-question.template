@@ -1,0 +1,19 @@
+<template id="empty-question">
+    <div
+      class="rounded-md border-l-4 border-r-1 border-y-2 border-solid border-black pl-2 pt-2 mr-2 mt-2 card-body question"
+    >
+      <div class="question-tile">
+        <div class="question-title">
+          <textarea
+            class="text-xl question-title-text"
+            placeholder="Untitled"
+          ></textarea>
+        </div>
+      </div>
+      <select class="question-type-selection">
+        <option value="0" selected>Multiple Choice</option>
+        <option value="1">Open Ended.</option>
+      </select>
+      <div class="spec-box"></div>
+    </div>
+</template>

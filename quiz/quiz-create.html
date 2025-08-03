@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-no-browser-semantics>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/q/static/css/index.css" />
+    <script src="/q/static/js/jquery.js"></script>
+
+    <!-- This is in here because i lazy load the template file... -->
+    <script src="/q/static/js/quiz-create.js" type="module"></script>
+  </head>
+  <body class="flex flex-col">
+    <div id="root" class="w-full h-full flex flex-col">
+      <div id="portal-root">
+        <!-- Just in case i need to portal something -->
+      </div>
+      <div
+        data-preset="card"
+        id="main"
+        class="self-center justify-self-center w-4/5 h-4-5"
+      >
+        <div id="page-title" class="card-title">Create a Quiz!</div>
+        <div id="quiz-create-main" class="card-body">
+          <div id="quiz-questions">
+            <!-- <children type="template:empty-question" />-->
+          </div>
+        </div>
+        <div id="quiz-create-button-tray" class="card-button-tray">
+          <!-- <children type="element:button" /> -->
+        </div>
+      </div>
+    </div>
+    <div hidden id="template-group">
+      <template id="empty-question">
+        <div
+          class="rounded-md border-l-4 border-r-1 border-y-2 border-solid border-black pl-2 pt-2 mr-2 mt-2 card-body question"
+        >
+          <div class="question-tile">
+            <div class="question-title">
+              <textarea
+                class="text-xl question-title-text"
+                placeholder="Untitled"
+              ></textarea>
+            </div>
+          </div>
+          <select class="question-type-selection">
+            <option value="0" selected>Multiple Choice</option>
+            <option value="1">Open Ended.</option>
+          </select>
+          <div class="spec-box">
+            <!-- <children type="template:(choices-group|none)" /> -->
+          </div>
+        </div>
+      </template>
+      <template id="choices-group">
+        <div class="choices-group">
+          <!-- <children type="template:choice-tile" /> -->
+        </div>
+      </template>
+      <template id="choice-tile">
+        <style>
+          .choice-text:placeholder-shown {
+            color: var(--text-muted);
+          }
+        </style>
+        <div class="choice-tile">
+          <input type="text" class="choice-text" placeholder="Choice Text" />
+          <button class="remove-choice-button">Remove</button>
+        </div>
+      </template>
+      <template id="button-1">
+        <button class="border-black dark:border-white border-2">
+          <!-- <children type="inline/text" /> -->
+        </button>
+      </template>
+    </div>
+    <script src="../hot-reload-client.js"></script>
+  </body>
+</html>

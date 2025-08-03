@@ -1,0 +1,3 @@
+<template id="choices-group">
+    <div class="choices-group"></div>
+</template>

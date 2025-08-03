@@ -26,5 +26,9 @@ custom component na ginawa ko para maging mas madali
 itong i-customize).
 */
 @import "tailwindcss";
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
 @import "./base.css";
 @import "./components.css";
