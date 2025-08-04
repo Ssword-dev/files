@@ -1,25 +1,25 @@
 <div id="template-group">
-      <button class="Ghr3Bbrpb3-o ID8WAwdyw95b7vCpW gdR6ZepL">
+      <button class="y057imkXnWMj IFg36NWDeEhe1nLwC RCSSUixw">
         <!-- children placeholder: type="inline/text" -->
       </button>
   
-    <div class="AloSFw4z2x9">
-      <input type="text" class="cfgNDeNAUcW" placeholder="Choice Text">
-      <button class="vXSL-YkWkBdoXxUEg5Tj">Remove</button>
+    <div class="X6RgbxYX0cz">
+      <input type="text" class="MNkqBs8d8bR" placeholder="Choice Text">
+      <button class="u6iW-FgtxcQCQQHokX5e">Remove</button>
     </div>
 
-    <div class="Qn77gx2QbXENx"></div>
+    <div class="TUC9GoDqVkHFL"></div>
 
-    <div class="bmBYseEZXs D9nkbKrpNP f0NfMmg06r r7ZQCLHMu4 Fs3bAR0Hr8nM Ghr3Bbrpb3-o Ptgw XJuq Um1U WVKc AgbMtHK3e x0ifjdDI">
-      <div class="ZgrilYDxGOsB8">
-        <div class="kemKVN0txQlr1i">
-          <textarea class="lKhZvFi GbS85hVmIS7EdvnCOlh" placeholder="Untitled"></textarea>
+    <div class="FtleqLWl-V ootVhokOKB i3yWuFBIii dcIEfdgRHW jb7NHpsCydTX y057imkXnWMj zu5j dIUE WPfJ ctks l0rbGc1JB RC0BUmQp">
+      <div class="nVCXyWG7S0jDC">
+        <div class="Vw2Jot6OhGw4uL">
+          <textarea class="a0xaZQV t35DD3Vv5IQ0cAM9fh5" placeholder="Untitled"></textarea>
         </div>
       </div>
-      <select class="WiJBbo8qR7HsjTg1Zf4wNTh">
+      <select class="HMJIs-1JRWms0x5dGdjr-G2">
         <option value="0" selected="">Multiple Choice</option>
         <option value="1">Open Ended.</option>
       </select>
-      <div class="ofNcLhKJ"></div>
+      <div class="t5CQQy9h"></div>
     </div>
 </div>

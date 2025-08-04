@@ -17,3 +17,6 @@
       <div class="spec-box"></div>
     </div>
 </template>
+<style>
+@import "../../static/css/tailwind.css";
+</style>

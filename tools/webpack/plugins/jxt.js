@@ -6,12 +6,75 @@ const cheerio = require("cheerio");
 // casual parsing css
 const postcss = require("postcss");
 const selectorParser = require("postcss-selector-parser");
+const postCssImportPlugin = require("postcss-import");
+
 // fs stuff
 const fs = require("fs").promises;
 const fg = require("fast-glob");
 
 // config stuff
 const postcssrc = require("postcss-load-config");
+
+// virtual file systems (in-memory files)
+const { SimpleVirtualFileSystem } = require("./vfs.js");
+const path = require("path");
+
+class JXPostCssDebugPlugin {
+  constructor() {
+    this.postcssPlugin = "jx-postcss-debug";
+  }
+
+  OnceExit(root, { result }) {
+    const css = root.toString();
+    if (css.includes("#\\#")) {
+      console.warn("⚠️ bad selector after plugins up to this point");
+      console.warn(css.match(/[^{}]+#\\#.*\{/g));
+    }
+  }
+}
+
+class JXImportPluginOptions {
+  constructor() {
+    this.vfs = new SimpleVirtualFileSystem();
+    this.regexp = {
+      // virtual:///path-to-css
+      VIRTUAL_PROTOCOL: /^virtual:\/\/(\/[a-zA-Z0-9._-]+)+$/,
+    };
+  }
+
+  resolve(id, basedir) {
+    if (id[0] == ".") {
+      return path.resolve(basedir, id);
+    }
+
+    try {
+      return require.resolve(id);
+    } catch {
+      return path.join(basedir, id);
+    }
+  }
+
+  /**
+   * @param {string} filename
+   */
+  load(filename, _) {
+    const vrm = this.regexp.VIRTUAL_PROTOCOL.exec(filename);
+
+    if (vrm) {
+      const path = vrm[1];
+      return this.vfs.read(path);
+    }
+
+    return fs.readFile(filename);
+  }
+
+  createHandle() {
+    return {
+      addVirtualFile: (...args) => this.vfs.write(...args),
+      readVirtualFile: (...args) => this.vfs.read(...args),
+    };
+  }
+}
 
 // name mangling plugin & walker
 class JXNameMangler {
@@ -20,9 +83,11 @@ class JXNameMangler {
     this.transform = selectorParser((selectors) => {
       selectors.walkClasses((classNode) => {
         classNode.value = this.translate(classNode.value);
-        classNode.spaces.before = "";
-        classNode.spaces.after = "";
       });
+
+      // selectors.walk((node) => {
+      //   console.log(node.toString());
+      // });
     });
   }
 
@@ -83,9 +148,17 @@ class JXNameMangler {
     const transform = this.transform;
     return {
       postcssPlugin: "jx-selector-mangler",
+      /**
+       *
+       * @param {postcss.Rule} rule
+       */
       Rule(rule) {
         try {
           rule.selector = transform.processSync(rule.selector);
+
+          if (rule.selector.includes("#\\#")) {
+            console.log("Suspiscous...");
+          }
         } catch (_) {
           // ignore invalid selectors
         }
@@ -101,7 +174,7 @@ class JXBundler {
     this.mangler = new JXNameMangler();
   }
 
-  async addToBundle(template) {
+  async addToBundle(template, filepath) {
     const $tpl = cheerio.load(template, {}, false);
     const $ = this.context.cheerio;
 
@@ -122,7 +195,6 @@ class JXBundler {
     $("#template-group").append(htmlClone.html());
 
     // clone for css
-    const cssClone = $el.clone();
     const styles = $styles
       .map((i, s) => $tpl(s).text())
       .get()
@@ -131,17 +203,37 @@ class JXBundler {
     // console.log(`Styles: ${styles}`);
     // console.log(`Style Elements: ${cssClone.filter("style")}`);
     // console.log(`Css Clone: ${cssClone.html()}`);
-    this.context.style += await this.processCss(styles);
+    const importPluginOptions = new JXImportPluginOptions();
+    const importPlugin = postCssImportPlugin(importPluginOptions);
+    const postStyles = await this.processCss(
+      styles,
+      [importPlugin],
+      [new JXPostCssDebugPlugin()],
+      filepath,
+    );
+
+    console.log(postStyles);
+
+    this.context.style += postStyles;
   }
 
-  async processCss(cssText) {
-    let plugins = [],
+  async processCss(cssText, preprocessPlugins, postprocessPlugins, from) {
+    let plugins = [...preprocessPlugins],
       options = { from: undefined };
     try {
-      ({ plugins, options } = await postcssrc());
+      const { plugins: _p, options: _o } = await postcssrc();
+      plugins.push(..._p);
+      options = _o;
     } catch {}
     plugins.push(this.mangler.pluginFactory());
-    const result = await postcss(plugins).process(cssText, options);
+    plugins.push(...postprocessPlugins);
+    const result = await postcss(plugins).process(cssText, {
+      from: path.resolve(options.from || process.cwd(), from || "/"),
+    });
+
+    console.log(
+      plugins.map((p, i) => [i, p.postcssPlugin || p.name || "Anonymous"]),
+    );
     return result.css || "";
   }
 
@@ -178,7 +270,7 @@ class JXTemplatePlugin {
           for (const f of files) {
             try {
               const content = await fs.readFile(f, "utf8");
-              await bundler.addToBundle(content);
+              await bundler.addToBundle(content, f);
             } catch (e) {
               compilation.errors.push(e);
             }
