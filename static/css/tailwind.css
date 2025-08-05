@@ -7,10 +7,6 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-neutral-400: oklch(70.8% 0 0);
-    --color-neutral-700: oklch(37.1% 0 0);
-    --color-neutral-900: oklch(20.5% 0 0);
-    --color-neutral-950: oklch(14.5% 0 0);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
@@ -252,17 +248,8 @@
   .table {
     display: table;
   }
-  .h-1 {
-    height: calc(var(--spacing) * 1);
-  }
-  .h-1\/2 {
-    height: calc(1/2 * 100%);
-  }
   .h-full {
     height: 100%;
-  }
-  .h-screen {
-    height: 100vh;
   }
   .w-1 {
     width: calc(var(--spacing) * 1);
@@ -294,20 +281,17 @@
   .resize {
     resize: both;
   }
+  .list-disc {
+    list-style-type: disc;
+  }
   .flex-col {
     flex-direction: column;
   }
   .items-center {
     align-items: center;
   }
-  .justify-center {
-    justify-content: center;
-  }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
-  }
-  .gap-6 {
-    gap: calc(var(--spacing) * 6);
   }
   .self-center {
     align-self: center;
@@ -337,10 +321,6 @@
     border-right-style: var(--tw-border-style);
     border-right-width: 1px;
   }
-  .border-b-2 {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 2px;
-  }
   .border-l-4 {
     border-left-style: var(--tw-border-style);
     border-left-width: 4px;
@@ -352,20 +332,11 @@
   .border-black {
     border-color: var(--color-black);
   }
-  .border-neutral-700 {
-    border-color: var(--color-neutral-700);
-  }
   .border-subtle {
     border-color: oklch(35% 0 0);
   }
   .bg-accent {
     background-color: oklch(70% 0.4 290deg);
-  }
-  .bg-neutral-900 {
-    background-color: var(--color-neutral-900);
-  }
-  .bg-neutral-950 {
-    background-color: var(--color-neutral-950);
   }
   .bg-primary {
     background-color: oklch(20% 0 0);
@@ -419,12 +390,6 @@
   }
   .text-main {
     color: oklch(90% 0 0);
-  }
-  .text-neutral-400 {
-    color: var(--color-neutral-400);
-  }
-  .text-white {
-    color: var(--color-white);
   }
   .italic {
     font-style: italic;
@@ -493,6 +458,17 @@
       border-color: var(--color-white);
     }
   }
+  .\[\&\>li\]\:m-5 {
+    &>li {
+      margin: calc(var(--spacing) * 5);
+    }
+  }
+  .\[\&\>li\]\:text-xl {
+    &>li {
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
+    }
+  }
   .\[\&\>li\]\:text-main {
     &>li {
       color: oklch(90% 0 0);
@@ -511,6 +487,9 @@
   input {
     padding: 0;
     padding-inline: 0;
+  }
+  a:hover, a:visited {
+    color: var(--);
   }
 }
 @layer components {

@@ -11,7 +11,9 @@
       body,
       div#root {
         height: max-content;
-        width: max-content;
+        width: 100vw;
+        max-width: 100vw;
+        /* overflow-x: hidden; */
       }
 
       .page-section {
@@ -38,7 +40,16 @@
         margin: 24px;
         font-family: "Geist";
         font-weight: 900;
-        transition: all ease 0.2s;
+        transition: all ease 200ms;
+
+        /*
+        makes the text not selectable because...
+        it would seem weird if it can be selected...
+        */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
       .tagline-subsector-frame {
@@ -63,6 +74,17 @@
       #hero-demo-input {
         width: 60%;
         align-self: center;
+      }
+
+      /* Features list */
+
+      #features-list-unordered {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        height: 100%;
+        width: 100%;
       }
     </style>
     <script src="./static/js/jquery.js"></script>
@@ -99,12 +121,12 @@
                 placeholder="Enter a number (1-100)"
                 class="w-full sm:flex-1 px-4 py-2 rounded border border-subtle bg-primary text-main focus:outline-none focus:ring-2 focus:ring-accent"
               />
-              <button
+              <!-- <button
                 id="hero-demo-btn"
                 class="px-6 py-2 rounded bg-accent text-main font-semibold hover:opacity-90 transition"
               >
                 Convert
-              </button>
+              </button> -->
             </div>
 
             <div
@@ -115,8 +137,15 @@
         </div>
         <div class="page-section" id="features-section">
           <div class="w-1/2" id="features-list">
-            <ul class="w-full h-full section-content [&>li]:text-main">
-              <!-- TODO: actually list all things here. -->
+            <ul
+              class="w-full h-full section-content list-disc [&>li]:m-5 [&>li]:text-main [&>li]:text-xl"
+              id="features-list-unordered"
+            >
+              <li>
+                <a href="javascript:void(0)"
+                  >Number to Roman Numeral Converter</a
+                >
+              </li>
             </ul>
           </div>
           <div
@@ -155,6 +184,14 @@
     <script>
       // IIFE to not pollute global
       (function (globalThis) {
+        function debounce(fn, delay) {
+          let timer;
+          return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+          };
+        }
+
         function toRomanOnes(number) {
           const current = number % 10;
 
@@ -195,7 +232,7 @@
             roman += toRomanOnes(current);
           } else {
             // 89 and above
-            roman = "XC " + toRomanOnes(current);
+            roman = "XC" + toRomanOnes(current);
           }
 
           return roman;
@@ -238,32 +275,39 @@
         const featuresTagline = document.querySelector("#features-tagline");
         const pricingTagline = document.querySelector("#pricing-tagline");
         const demoInput = document.querySelector("#hero-demo-input");
-        const demoSubmitBtn = document.querySelector("#hero-demo-btn");
+        // const demoSubmitBtn = document.querySelector("#hero-demo-btn");
         const demoResultView = document.querySelector("#hero-demo-output");
 
         obs.observe(heroTagline);
         obs.observe(featuresTagline);
         obs.observe(pricingTagline);
 
-        demoSubmitBtn.addEventListener("click", function (evt) {
-          const unsafe = demoInput.value;
-          let safe = null;
+        demoInput.addEventListener(
+          "input",
+          debounce(function (evt) {
+            const unsafe = demoInput.value;
+            let safe = null;
 
-          try {
-            safe = parseInt(unsafe, 10);
-          } catch {
-            demoResultView.innerText = "Invalid Entry";
-            return;
-          }
+            try {
+              safe = parseInt(unsafe, 10);
+            } catch {
+              demoResultView.innerText = "Invalid Entry";
+              return;
+            }
 
-          if (safe > 100) {
-            demoResultView.innerText =
-              "Input must be less than or equal to 100";
-            return;
-          }
+            if (safe > 100) {
+              demoResultView.innerText =
+                "Input must be less than or equal to 100";
+              return;
+            }
 
-          demoResultView.innerText = toRoman(safe);
-        });
+            if (safe < 0) {
+              demoResultView.innerText = "Input must be positive";
+            }
+
+            demoResultView.innerText = toRoman(safe);
+          }, 50),
+        );
       })(window);
     </script>
     <!-- hot reload. -->
