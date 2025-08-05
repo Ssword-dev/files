@@ -10,4 +10,9 @@
   textarea:focus {
     outline: none;
   }
+
+  input {
+    padding: 0;
+    padding-inline: 0;
+  }
 }

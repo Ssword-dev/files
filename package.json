@@ -1,6 +1,6 @@
 {
   "name": "q",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.9.2",
   "scripts": {
     "dev": "concurrently \"yarn tw-watch\" \"yarn hrs\"",
     "hrs": "yarn node scripts/hot-reload.js",

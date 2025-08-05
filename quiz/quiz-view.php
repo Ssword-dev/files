@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 
-  <link href="./commons/tailwind-dist.css">
+  <link href="../static/css/tailwind-dist.css">
   <style>
     :root {
       --font-family: sans-serif;
@@ -57,18 +57,24 @@
       border-bottom: 1px solid var(--color-border);
     }
 
-    .qf_question_tile.qf_question_text_variant {
+    .qf_question_tile.variant-text-identity {
+      padding-bottom: none;
+    }
+
+    .qf_question_tile.qf_question_text_variant_short {
       display: flex;
       flex-direction: row;
+      align-items: center;
       /** one line */
     }
 
-    .qf_question_tile.qf_question_text_variant label::after {
+    .qf_question_tile.qf_question_text_variant_short label::after {
       content: ':';
     }
 
-    .qf_question_tile.qf_question_text_variant input {
-      font-size: 0.7rem;
+    .qf_question_tile.qf_question_text_variant_short input {
+      font-size: var(--font-size-question);
+      margin-left: 4px;
     }
 
     .qt_label {
@@ -167,7 +173,7 @@
     // generate the form fields
     $i = 1; // question counter
 
-    echo "<div class='qf_question_tile qf_question_text_variant'><label for='uname' class='qt_label'>Your name</label><input type='text' name='uname' required></div>"; // user name
+    echo "<div class='qf_question_tile qf_question_text_variant_short variant-text-identity'><label for='uname' class='qt_label'>Your name</label><input type='text' name='uname' required></div>"; // user name
 
     foreach ($questions as $q) {
 
@@ -200,7 +206,5 @@
     </div>
   </form>
 
-  <script src="./hot-reload-client.js"></script>
+  <script src="../hot-reload-client.js"></script>
 </body>
-
-</html>
