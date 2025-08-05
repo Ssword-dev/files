@@ -15,8 +15,8 @@ and a real button makes sense to be a button)
     position: relative;
     display: flex;
     flex-direction: column;
-    border-radius: calc(var(--card-initial-border));
-    box-shadow: 0 4px 8px var(--color-card-shadow);
+    border-radius: calc(var(--radius-moderate, 4px));
+    box-shadow: 0 4px 8px var(--color-blend, #aaa);
     transition: 0.5s box-shadow ease;
     height: 16rem;
     width: 20rem;
@@ -44,14 +44,14 @@ and a real button makes sense to be a button)
     display: flex;
     justify-self: left; /** embed left */
     font-size: 0.7rem;
-    color: var(--color-muted);
+    color: var(--color-muted, gray);
     font-weight: 100;
     margin: 4px;
   }
 
   [data-preset~="card"]:hover {
-    border-radius: calc(var(--card-initial-border) + 4px);
-    box-shadow: 0 8px 16px var(--color-card-shadow);
+    border-radius: calc(var(--radius-base, 4px) + 4px);
+    box-shadow: 0 8px 16px var(--color-shadow);
     transition: 0.5s box-shadow ease;
   }
 
@@ -71,8 +71,9 @@ and a real button makes sense to be a button)
     width: 100%;
     height: 100%;
     top: 0;
-    transition: top 2s ease;
-    transition-delay: 85ms; /** A small transition delay helps to make it more natural */
+
+    /** A small transition delay helps to make it more natural */
+    transition-delay: 85ms;
   }
 
   [data-preset~="card"] .card-button-tray {
@@ -85,8 +86,8 @@ and a real button makes sense to be a button)
 
   /* Component: Button */
   :is(div, button)[data-preset="button"] {
-    background-color: var(--btn-bg);
-    color: var(--btn-fg);
+    background-color: var(--color-primary, white);
+    color: var(--color-main, black);
     border-radius: 8px;
     height: 2.5rem;
     min-height: 2rem;
@@ -95,14 +96,14 @@ and a real button makes sense to be a button)
 
   /* Feat: Button User Feedback (haha, dopamine!) */
   :is(div, button)[data-preset="button"]:hover {
-    background-color: var(--btn-bg-hover);
+    background-color: var(--color-primary, white);
     transition: background-color 0.5s ease;
   }
 
   :is(div, button)[data-preset="button"]:active {
-    background-color: var(--btn-bg-clicked);
     transform: scale(0.98);
-    transition: background-color 0.5s ease transform 0.5s ease;
+    filter: brightness(var(--brightness-highlight, 110%));
+    transition: all 0.5s ease transform 0.5s ease;
   }
 
   /* content-frame */
@@ -113,12 +114,12 @@ and a real button makes sense to be a button)
     justify-self: center;
     width: 100%;
     height: 100%;
-    border: 1px solid var(--frame-border);
-    border-radius: var(--base-border-radius);
+    border: 1px solid var(--color-main, black);
+    border-radius: var(--radius-moderate, 4px);
   }
 
   [data-preset~="skeleton"] {
-    background-color: var(--skeleton-bg);
+    background-color: var(--color-muted, gray);
   }
 
   [data-preset~="ribbon"] {
@@ -126,13 +127,13 @@ and a real button makes sense to be a button)
     top: -0.5rem;
     right: -1.2rem;
     transform: rotate(25deg);
-    font-size: var(--font-base);
-    width: calc(var(--font-base) * 4);
+    font-size: var(--font-base, 0.7rem);
+    width: calc(var(--font-base, 0.7rem) * 4);
     padding: 0.25rem 0.5rem;
     text-align: center;
     border-radius: 999px;
-    background-color: var(--ribbon-bg, crimson);
-    color: var(--ribbon-fg, white);
+    background-color: var(--color-primary, crimson);
+    color: var(--color-subtle, #aaa);
     font-weight: 600;
     pointer-events: none;
     z-index: 10;
@@ -145,9 +146,9 @@ and a real button makes sense to be a button)
   div[data-preset~="clones-material-input-wrapper"] input {
     width: 100%;
     border-bottom-width: 2px;
-    border-color: var(--x-material-input-fg);
+    border-color: var(--color-primary, white);
     background-color: transparent;
-    color: var(--x-material-input-fg);
+    color: var(--color-main, black);
     padding-top: 1.5rem;
     padding-bottom: 0.5rem;
     padding-left: 0.5rem;
@@ -167,19 +168,12 @@ and a real button makes sense to be a button)
     input:placeholder-shown
     + label {
     top: 1.25rem;
-    font-size: var(--font-base);
-    color: var(--x-material-input-fg);
+    font-size: var(--font-base, 4px);
+    color: var(--color-main, black);
   }
 
   div[data-preset~="clones-material-input-wrapper"] input:focus + label {
-    /* peer-placeholder-shown:top-5
-         peer-placeholder-shown:text-base
-          peer-placeholder-shown:text-gray-400
-           peer-focus:top-1 
-           peer-focus:text-sm 
-           peer-focus:text-blue-400 */
     top: 0.25rem;
-    font-size: var(--font-sm);
-    color: var(--x-material-input-accent);
+    font-size: var(--font-sm, 0.25rem);
   }
 }

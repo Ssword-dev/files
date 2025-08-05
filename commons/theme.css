@@ -17,74 +17,51 @@ na nagsasapaw sa mga style dito.
 */
 
 @theme inline {
-  /* bases */
-  --base-border-radius: 8px;
+  /* light mode | no preference */
 
-  /* backgrounds */
-  --bg-body: oklch(98% 0 0); /* near-white */
-  --bg-surface: oklch(95% 0 0); /* card/panel bg */
-  --bg-hover: oklch(90% 0 0); /* hover highlight */
+  /* Non color stuff */
+  --radius-base: 4px;
+  --radius-sharp: 0px;
+  --radius-moderate: 4px;
+  --radius-input: 8px;
 
-  /* card */
-  --card-bg: oklch(80% 0 0);
-  --card-border-initial: 8px;
+  /* Colors */
+  --color-primary: oklch(80% 0 0);
+  --color-secondary: oklch(40% 0 0); /*  */
+  --dim-muted: 80%; /* when stuff is disabled, it dims by 20% */
 
-  /* buttons */
-  --btn-bg: oklch(15% 0 0); /* dark neutral (black-like) */
-  --btn-bg-hover: oklch(25% 0 0); /* lighter hover */
-  --btn-bg-clicked: oklch(35% 0 0);
-  --btn-fg: oklch(98% 0 0); /* white text */
+  /* Used for color blending between primary and secondary */
+  --color-blend: oklch(60% 0 0); /* somewhere in between */
 
-  /* frame */
-  --frame-bg: oklch(88% 0 0); /* A bit gray but lighter */
-  --frame-border: oklch(12% 0 0); /* strong border */
+  --color-main: oklch(10% 0 0); /* main foreground */
+  --color-subtle: oklch(65% 0 0); /* like... subtle... */
 
-  /* skeleton */
-  --skeleton-bg: oklch(50% 0 0);
+  --color-shadow: oklch(30% 100 / 0.08); /* primary shadow */
+  --color-shadow-blend: oklch(40% 90 / 0.08); /* secondary/blend shadow */
 
-  /* clone material input */
-  --x-material-input-muted: oklch(70% 0 0);
-  --x-material-input-fg: oklch(30% 0 0);
-  --x-material-input-bg: oklch(80 0 0);
-  --x-material-input-accent: oklch(80% 0.127 208);
-
-  /* text */
-  --text-main: oklch(10% 0 0); /* black-ish */
-  --text-muted: oklch(45% 0 0); /* mid-gray */
-  --text-subtle: oklch(65% 0 0); /* lighter gray */
-
-  --shadow: oklch(0% 0 0 / 0.08); /* soft black shadow */
+  /* User feedback, good feedback may induce serotonin. */
+  --color-accent: oklch(70% 0.4 290deg);
+  --brightness-highlight: 120%;
 }
 
 @media (prefers-color-scheme: dark) {
   @theme inline {
     /* dark mode overrides */
-    --bg-body: oklch(10% 0 0); /* near-black */
-    --bg-surface: oklch(15% 0 0); /* card/panel bg */
-    --bg-hover: oklch(20% 0 0); /* hover highlight */
+    --color-primary: oklch(20% 0 0);
+    --color-secondary: oklch(60% 0 0);
+    --color-muted: oklch(
+      55% 0 0
+    ); /* background for like disabled... stuff... */
 
-    --card-bg: oklch(25% 0 0);
-    --card-border-initial: 8px;
+    /* Used for color blending between primary and secondary */
+    --color-blend: oklch(40% 0 0); /* somewhere in between */
 
-    --btn-bg: oklch(85% 0 0); /* light neutral (white-like) */
-    --btn-bg-hover: oklch(75% 0 0); /* darker hover */
-    --btn-bg-clicked: oklch(65% 0 0);
-    --btn-fg: oklch(5% 0 0); /* black text */
+    --color-main: oklch(90% 0 0); /* main foreground */
+    --color-subtle: oklch(35% 0 0); /* like... subtle... */
 
-    --frame-bg: oklch(20% 0 0); /* A bit gray but darker */
-    --frame-border: oklch(80% 0 0); /* strong border */
-
-    --skeleton-bg: oklch(30% 0 0);
-
-    --x-material-input-muted: oklch(30% 0 0);
-    --x-material-input-fg: oklch(70% 0 0);
-    --x-material-input-bg: oklch(20% 0 0);
-    --x-material-input-accent: oklch(80% 0.127 208);
-
-    --text-main: oklch(90% 0 0); /* white-ish */
-    --text-muted: oklch(55% 0 0); /* mid-gray */
-    --text-subtle: oklch(35% 0 0); /* darker gray */
-
-    --shadow: oklch(100% 100% / 0.08); /* soft white shadow */
+    --color-shadow: oklch(100% 100 / 0.08); /* primary shadow */
+    --color-shadow-blend: oklch(
+      80% 90 / 0.08
+    ); /* acts like secondary shadow. for blending. */
   }
 }

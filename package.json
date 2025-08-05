@@ -34,6 +34,7 @@
     "ws": "^8.18.3"
   },
   "dependencies": {
+    "@fontsource/geist-sans": "^5.2.5",
     "cheerio": "^1.1.2"
   }
 }

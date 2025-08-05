@@ -555,6 +555,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/geist-sans@npm:^5.2.5":
+  version: 5.2.5
+  resolution: "@fontsource/geist-sans@npm:5.2.5"
+  checksum: 10c0/31f1da384a54eaf385f3261218d2971e075fc34306ad2e14f84f079aeabf2e6dbc7dddc23389037a8476fef467a1d94797a573f6a6e2c826b85badfed921cdb3
+  languageName: node
+  linkType: hard
+
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -3835,6 +3842,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "q@workspace:."
   dependencies:
+    "@fontsource/geist-sans": "npm:^5.2.5"
     "@tailwindcss/cli": "npm:4.1.8"
     ansi-styles: "npm:^6.2.1"
     autoprefixer: "npm:^10.4.21"

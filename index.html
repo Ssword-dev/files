@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- * I do not have a name for this. -->
+    <title>I do not know what to name this</title>
+    <link rel="stylesheet" href="./static/css/index.css" />
+    <link rel="stylesheet" href="./static/fonts/Geist/index.css" />
+    <style>
+      body,
+      div#root {
+        height: max-content;
+        width: max-content;
+      }
+
+      .page-section {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+      }
+
+      .page-section#hero-section {
+        background-color: var(--color-primary);
+      }
+
+      .page-section#features-section {
+        background-color: var(--color-blend);
+      }
+
+      .page-section#pricing-section {
+        background-color: var(--color-secondary);
+      }
+
+      .tagline-subsector-text {
+        position: relative; /* required for puppeteering the tagline */
+        margin: 24px;
+        font-family: "Geist";
+        font-weight: 900;
+        transition: all ease 0.2s;
+      }
+
+      .tagline-subsector-frame {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .section-content {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      #hero-demo-frame {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 24px; /* gap so it does not feel cramped */
+      }
+
+      #hero-demo-input {
+        width: 60%;
+        align-self: center;
+      }
+    </style>
+    <script src="./static/js/jquery.js"></script>
+  </head>
+  <body class="">
+    <div id="root">
+      <main>
+        <div class="page-section" id="hero-section">
+          <!-- idea: this should be like "the site for convinience"  -->
+          <div class="w-1/2 tagline-subsector-frame" id="hero-tagline-frame">
+            <h1
+              class="text-[4rem] text-main tagline-subsector-text"
+              id="hero-tagline"
+            >
+              All tools at your disposal.
+            </h1>
+          </div>
+          <div class="w-1/2" id="hero-demo-frame">
+            <h1 class="text-3xl text-main md:text-5xl font-bold text-center">
+              Convert Numbers to Roman Numerals
+            </h1>
+
+            <p class="text-lg text-main max-w-xl text-center">
+              A demonstration of our ultra-fast utility service. No sign-up
+              required. Instant response.
+            </p>
+
+            <div
+              class="flex flex-col sm:flex-row gap-4 w-full max-w-md items-center"
+            >
+              <input
+                id="hero-demo-input"
+                type="number"
+                placeholder="Enter a number (1-100)"
+                class="w-full sm:flex-1 px-4 py-2 rounded border border-subtle bg-primary text-main focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+              <button
+                id="hero-demo-btn"
+                class="px-6 py-2 rounded bg-accent text-main font-semibold hover:opacity-90 transition"
+              >
+                Convert
+              </button>
+            </div>
+
+            <div
+              id="hero-demo-output"
+              class="text-xl text-accent font-mono"
+            ></div>
+          </div>
+        </div>
+        <div class="page-section" id="features-section">
+          <div class="w-1/2" id="features-list">
+            <ul class="w-full h-full section-content [&>li]:text-main">
+              <!-- TODO: actually list all things here. -->
+            </ul>
+          </div>
+          <div
+            class="w-1/2 tagline-subsector-frame"
+            id="features-tagline-frame"
+          >
+            <h1
+              class="text-[4rem] text-main tagline-subsector-text"
+              id="features-tagline"
+            >
+              Fast, Innovative Technology.
+            </h1>
+          </div>
+        </div>
+        <div class="page-section" id="pricing-section">
+          <!-- 
+        this is a fun little pricing section. it literally
+        will just say its free, because this is not hosted...
+        -->
+          <div class="w-1/2 tagline-subsector-frame" id="pricing-tagline-frame">
+            <h1
+              class="text-[4rem] text-main tagline-subsector-text"
+              id="pricing-tagline"
+            >
+              Free to use.
+            </h1>
+          </div>
+          <div class="w-1/2"></div>
+        </div>
+      </main>
+      <footer>
+        <!-- i guess some footer here. later though... -->
+      </footer>
+    </div>
+
+    <script>
+      // IIFE to not pollute global
+      (function (globalThis) {
+        function toRomanOnes(number) {
+          const current = number % 10;
+
+          if (current === 0) return "";
+          if (current <= 3) return "I".repeat(current);
+          if (current === 4) return "IV";
+          if (current === 9) return "IX";
+          if (current >= 5) return "V" + "I".repeat(current - 5);
+        }
+
+        // the actual service/page is on php.
+        // i just ported this here because demo.
+        function toRoman(number) {
+          let roman = "";
+          const current = Number(number);
+
+          if (!Number.isInteger(current)) return null;
+
+          if (current > 100) {
+            return null;
+          }
+
+          if (current === 100) {
+            return "C";
+          }
+
+          if (current < 89) {
+            const tenths = Math.floor(current / 10);
+
+            if (tenths >= 1 && tenths <= 3) {
+              roman += "X".repeat(tenths);
+            } else if (tenths === 4) {
+              roman += "XL";
+            } else if (tenths >= 5 && tenths <= 8) {
+              roman += "L" + "X".repeat(tenths - 5);
+            }
+
+            roman += toRomanOnes(current);
+          } else {
+            // 89 and above
+            roman = "XC " + toRomanOnes(current);
+          }
+
+          return roman;
+        }
+
+        // i used to do this with react. now just
+        // gonna do this again...
+        const obs = new IntersectionObserver(
+          (entries) => {
+            if (entries.length < 1) {
+              return; // early exit
+            }
+
+            for (let i = 0; i < entries.length; i++) {
+              const entry = entries[i];
+              const visibility = entry.intersectionRatio;
+              const offset = (1 - visibility) * 100;
+
+              switch (entry.target) {
+                case heroTagline:
+                  heroTagline.style.left = `-${offset}px`;
+                  break;
+
+                case featuresTagline:
+                  featuresTagline.style.right = `-${offset}px`;
+                  break;
+
+                case pricingTagline:
+                  pricingTagline.style.left = `-${offset}px`;
+                  break;
+              }
+            }
+          },
+          {
+            threshold: Array.from({ length: 100 }).map((_, i) => i / 100),
+          },
+        );
+
+        const heroTagline = document.querySelector("#hero-tagline");
+        const featuresTagline = document.querySelector("#features-tagline");
+        const pricingTagline = document.querySelector("#pricing-tagline");
+        const demoInput = document.querySelector("#hero-demo-input");
+        const demoSubmitBtn = document.querySelector("#hero-demo-btn");
+        const demoResultView = document.querySelector("#hero-demo-output");
+
+        obs.observe(heroTagline);
+        obs.observe(featuresTagline);
+        obs.observe(pricingTagline);
+
+        demoSubmitBtn.addEventListener("click", function (evt) {
+          const unsafe = demoInput.value;
+          let safe = null;
+
+          try {
+            safe = parseInt(unsafe, 10);
+          } catch {
+            demoResultView.innerText = "Invalid Entry";
+            return;
+          }
+
+          if (safe > 100) {
+            demoResultView.innerText =
+              "Input must be less than or equal to 100";
+            return;
+          }
+
+          demoResultView.innerText = toRoman(safe);
+        });
+      })(window);
+    </script>
+    <!-- hot reload. -->
+    <script src="./hot-reload-client.js"></script>
+  </body>
+</html>
