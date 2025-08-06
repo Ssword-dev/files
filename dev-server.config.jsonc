@@ -1,9 +1,8 @@
 {
-    "texts": {
-        "hot-reload": "\\color[green]All clients has been reloaded due to \\var[path].\\endcolor;"
-    },
-    "ignoreFiles": [
-        "./commons/*.css",
-        "!./commons/talwind-dist.css"
-    ]
+  "texts": {
+    "hot-reload": "\\color[green]All clients has been reloaded due to \\var[path].\\endcolor;"
+  },
+  "ignoreFiles": [
+    ".git/"
+  ]
 }

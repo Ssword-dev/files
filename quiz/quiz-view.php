@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 
-  <link href="../static/css/tailwind-dist.css">
+  <link rel="stylesheet" href="../static/css/index.css">
   <style>
     :root {
       --font-family: sans-serif;
@@ -51,45 +51,18 @@
       box-shadow: var(--box-shadow);
     }
 
-    .qf_question_tile {
-      margin-bottom: var(--spacing-question);
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .qf_question_tile.variant-text-identity {
-      padding-bottom: none;
-    }
-
-    .qf_question_tile.qf_question_text_variant_short {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      /** one line */
-    }
-
-    .qf_question_tile.qf_question_text_variant_short label::after {
-      content: ':';
-    }
-
-    .qf_question_tile.qf_question_text_variant_short input {
-      font-size: var(--font-size-question);
-      margin-left: 4px;
-    }
-
-    .qt_label {
+    /* .qt_label {
       font-weight: bold;
       font-size: var(--font-size-question);
       display: block;
       margin-bottom: 8px;
-    }
+    } */
 
     label {
       margin-left: 4px;
     }
 
     input[type="radio"] {
-      accent-color: var(--color-accent);
       appearance: none;
       transform: scale(1.5);
     }
@@ -148,11 +121,31 @@
 
 <body>
   <form action="/q/score" method="POST">
+    <div id="identity">
+      <div class="identity-text-field">
+        <label for="identity-field-name" class="identity-text-field-label">Your Name</label>
+        <input type="text" id="identity-field-name" class="identity-text-field-input">
+      </div>
+    </div>
+    <div id="questions" class="flex flex-col gap-3">
+      <!-- javascript will insert elements here -->
+    </div>
+    <div class="btn_tray">
+      <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
+    </div>
+  </form>
+
+  <!--
+  This is actual partial rerendering data. because the client has
+  less "bandwidth" (assumed so. so it can work on clients of like weak signal
+  i think)
+  this data gets transmitted to the client. the answer key is not
+  included because... thats just gonna be an easy way to spoof
+  answers... like... you just have to know json.
+  -->
+  <script type="application/json" id="server-prerender-data">
     <?php
-
-    // dynamically generate question elements
-    // formatting is nice
-
     $quizId = $_GET['id'] ?? null;
     $questions = [];
 
@@ -166,45 +159,36 @@
         $data = json_decode($response, true);
         if (isset($data['questions']) && is_array($data['questions'])) {
           $questions = $data['questions'];
+          $stack = [];
+          foreach ($questions as $q) {
+            $newQuestion = [];
+
+            foreach ($q as $key => $val) {
+              if ($key === 'answer') {
+                continue; // skip 'answer' key
+              }
+
+              $newQuestion[$key] = $val;
+            }
+
+            $stack[] = $newQuestion;
+          }
+
+          echo json_encode([
+            "id" => $quizId,
+            "questions" => $stack
+          ]);
         }
       }
     }
 
-    // generate the form fields
-    $i = 1; // question counter
-
-    echo "<div class='qf_question_tile qf_question_text_variant_short variant-text-identity'><label for='uname' class='qt_label'>Your name</label><input type='text' name='uname' required></div>"; // user name
-
-    foreach ($questions as $q) {
-
-      echo "<div class='qf_question_tile' id='qw_$i'>"; // opening: div
-      echo "<label for='q$i' class='qt_label'>" . $q["question"] . "</label>"; // question tile label
-      // echo "<br>";
-      switch ($q["type"]) {
-        // Internally this maps into an enum. it is the MultiChoice type
-        case 0:
-          $c = 1; // choice counter
-          foreach ($q["answerChoices"] as $p) {
-            echo "<input type='radio' name='q$i' value='$c' id='q$i\_$c' required>"; // records which client picks, value is gonna be nth choice
-            echo "<label for='q$i\_$c'>" . $p . "</label>";
-
-            echo "<br>";
-            $c++; // increment
-          }
-          break;
-        case 1:
-          echo "<textarea name='q$i' id='q$i' rows='10'></textarea>";
-      }
-      echo "</div>";
-      echo "<br>";
-      $i++;
-    }
     ?>
-    <div class="btn_tray">
-      <button type="submit">Submit</button>
-      <button type="reset">Reset</button>
-    </div>
-  </form>
+  </script>
 
+  <!--
+  This is the actual script the page uses (:
+  it renders quizzes and their choices.
+  -->
+  <script src="../static/js/quiz-view.js" type="module" async></script>
   <script src="../hot-reload-client.js"></script>
 </body>
