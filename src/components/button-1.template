@@ -1,5 +1,0 @@
-<template id="button-1">
-      <button class="border-black dark:border-white border-2">
-        <!-- children placeholder: type="inline/text" -->
-      </button>
-  </template>

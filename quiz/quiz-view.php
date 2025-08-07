@@ -189,6 +189,6 @@
   This is the actual script the page uses (:
   it renders quizzes and their choices.
   -->
-  <script src="../static/js/quiz-view.js" type="module" async></script>
+  <script src="../static/js/quiz-view/page.js" type="module" async></script>
   <script src="../hot-reload-client.js"></script>
 </body>

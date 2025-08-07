@@ -1,0 +1,1 @@
+- 8/7/25 - Gawing parang kahoot (sabi ni mam)
