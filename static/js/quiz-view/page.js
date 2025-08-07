@@ -9,10 +9,13 @@
 import h from "../modules/dom-utils.js";
 import QuestionType from "../enum/question-type.js";
 
+// TODO: To make this kahoot-like. i need to implement the question queue and
+// TODO: Timer.
 class QuizViewPage {
   constructor() {
     this.queue = [];
     this.timer = null; // Promise<void> | null
+    this.currentStateNode = null; // HTMLElement | null
   }
 
   // * Function Component for creating multi choice input.
@@ -105,6 +108,8 @@ class QuizViewPage {
 
     return questionWrapper;
   };
+
+  async unmountCurrentQuestionElement() {}
 
   async main() {
     // * this data is not fragile
