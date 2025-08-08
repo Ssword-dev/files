@@ -55,6 +55,6 @@ function toRoman($number)
 
 if (isset($_GET["n"])) {
     $n = $_GET["n"];
-    $o = toRoman($n - 0);
+    $o = toRoman($n - 0 /** this is an implicit number cast (: */);
     echo "<p style='color:red'>$o</p>";
 }
