@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 
-  <link rel="stylesheet" href="../static/css/index.css">
+  <link rel="stylesheet" href="../../static/css/index.css">
   <style>
     :root {
       --font-family: sans-serif;
@@ -120,14 +120,14 @@
 </head>
 
 <body>
-  <form action="/q/score" method="POST">
+  <form action="" method="POST">
     <div id="identity">
       <div class="identity-text-field">
         <label for="identity-field-name" class="identity-text-field-label">Your Name</label>
         <input type="text" id="identity-field-name" class="identity-text-field-input">
       </div>
     </div>
-    <div id="questions" class="flex flex-col gap-3">
+    <div id="display-container" class="flex flex-col gap-3">
       <!-- javascript will insert elements here -->
     </div>
     <div class="btn_tray">
@@ -189,6 +189,6 @@
   This is the actual script the page uses (:
   it renders quizzes and their choices.
   -->
-  <script src="../static/js/quiz-view/page.js" type="module" async></script>
-  <script src="../hot-reload-client.js"></script>
+  <script src="../../static/js/quiz-view/page.js" type="module" async></script>
+  <script src="../../hot-reload-client.js"></script>
 </body>

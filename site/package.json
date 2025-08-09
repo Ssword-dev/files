@@ -1,5 +1,5 @@
 {
-  "name": "q",
+  "name": "site",
   "packageManager": "yarn@4.9.2",
   "scripts": {
     "dev": "concurrently \"yarn tw-watch\" \"yarn hrs\"",

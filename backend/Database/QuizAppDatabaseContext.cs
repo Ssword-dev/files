@@ -21,7 +21,7 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
     // this is the directory of where the exe is located.
     public static readonly string AssemblyDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!;
     public static readonly string CurrentDirectory = Directory.GetCurrentDirectory();
-    public static readonly string RecordsDirectory = Path.Combine(CurrentDirectory, "questions");
+    public static readonly string RecordsDirectory = Path.Combine(CurrentDirectory, "public", "data", "questions");
     public DbSet<DatabaseQuizEntity> Quizzes { get; set; }
     public DbSet<DatabaseQuizTagEntity> QuizTags { get; set; }
     public DbSet<DatabaseQuizTagRelationEntity> QuizTagRelations { get; set; }
