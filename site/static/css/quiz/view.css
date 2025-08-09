@@ -1,0 +1,26 @@
+.quiz-timer.low-time {
+    transform-origin: center;
+    animation: timer-pulsate 0.8s ease-in-out infinite;
+}
+
+@keyframes timer-pulsate {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.15);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    75% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

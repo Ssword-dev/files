@@ -7,6 +7,7 @@
   <title>Document</title>
 
   <link rel="stylesheet" href="../../static/css/index.css">
+  <link rel="stylesheet" href="../../static/css/quiz/view.css">
   <style>
     :root {
       --font-family: sans-serif;

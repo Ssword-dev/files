@@ -27,11 +27,12 @@ class QuizViewPage {
     this.quizId = prerenderData["id"];
     this.questions = prerenderData["questions"];
 
-    // uh so i dont have react. sadly. so i have
-    // this mini reactive system (vue inspired).
-    // basically it lets you subscribe to it to listen
-    // for property changes. subscribing allows me to update
-    // the ui.
+    // * uh so i dont have react. sadly. so i have
+    // * this mini reactive system (vue inspired).
+    // * basically it lets you subscribe to it to listen
+    // * for property changes. subscribing allows me to update
+    // * the ui.
+    // * see modules/dom-utils/reactive.js to see more.
     this.state = h.reactive({
       currentTimeLeft: this.timerDuration,
     });
@@ -104,7 +105,6 @@ class QuizViewPage {
         inputArea.appendChild(choiceWrapper);
       });
     } else {
-      // * fallback: text input (short answer or unknown type)
       const textInput = h.element("input", {
         type: "text",
         class: "border p-2 rounded",
