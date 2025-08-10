@@ -1,0 +1,33 @@
+{
+  "ownerQuizId": "bd01e13e-6988-437b-80c6-626967ae5b92",
+  "questions": [
+    {
+      "type": 0,
+      "title": "Which of these is a programming language?",
+      "choices": ["HTML", "Python", "CSS", "JSON"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "What does 'OOP' stand for?",
+      "choices": ["Object-Oriented Programming", "Only One Program", "Open Output Processing", "Overloaded Operation Pointer"],
+      "answerIndex": 0
+    },
+    {
+      "type": 2,
+      "title": "Name a keyword used to define a function in JavaScript.",
+      "answers": ["function", "=>"]
+    },
+    {
+      "type": 0,
+      "title": "Which symbol is used for comments in Python?",
+      "choices": ["//", "#", "<!-- -->", "--"],
+      "answerIndex": 1
+    },
+    {
+      "type": 3,
+      "title": "In programming, what is the term for a named space in memory that stores a value?",
+      "answers": ["variable", "var", "const", "let"]
+    }
+  ]
+}

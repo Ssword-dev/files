@@ -1,1 +1,251 @@
-{"OwnerQuizId":"6cef2072-f1e0-4739-8afe-0f367f247b78","Questions":[{"Type":0,"Question":"what is newton\u0027s second law?","AnswerChoices":["f=ma","e=mc^2","v=ir","none of the above"],"Answer":0},{"Type":0,"Question":"unit of force?","AnswerChoices":["joule","pascal","newton","watt"],"Answer":2},{"Type":0,"Question":"which of these is a vector quantity?","AnswerChoices":["mass","speed","velocity","temperature"],"Answer":2},{"Type":0,"Question":"acceleration is defined as?","AnswerChoices":["distance/time","velocity/time","speed \u00D7 time","force/mass"],"Answer":1},{"Type":0,"Question":"speed of light in vacuum?","AnswerChoices":["3\u00D710\u2078 m/s","1.5\u00D710\u2078 m/s","3\u00D710\u2076 m/s","9.8 m/s\u00B2"],"Answer":0},{"Type":0,"Question":"ohm\u0027s law relates voltage, current, and?","AnswerChoices":["power","resistance","energy","force"],"Answer":1},{"Type":0,"Question":"work is defined as?","AnswerChoices":["force \u00D7 time","mass \u00D7 velocity","force \u00D7 distance","power \u00D7 time"],"Answer":2},{"Type":0,"Question":"newton\u0027s third law says?","AnswerChoices":["f=ma","objects stay at rest","equal and opposite reaction","momentum is conserved"],"Answer":2},{"Type":0,"Question":"SI unit of power?","AnswerChoices":["watt","joule","newton","pascal"],"Answer":0},{"Type":0,"Question":"gravitational acceleration on earth?","AnswerChoices":["10 m/s\u00B2","9.8 m/s\u00B2","9 m/s\u00B2","8.9 m/s\u00B2"],"Answer":1},{"Type":0,"Question":"momentum formula?","AnswerChoices":["mass \u00D7 speed","force \u00D7 time","mass \u00D7 velocity","velocity/time"],"Answer":2},{"Type":0,"Question":"if net force is zero, object is?","AnswerChoices":["accelerating","at rest or constant velocity","speeding up","none of the above"],"Answer":1},{"Type":0,"Question":"resistance unit?","AnswerChoices":["ampere","volt","ohm","watt"],"Answer":2},{"Type":0,"Question":"energy stored due to position?","AnswerChoices":["kinetic","potential","mechanical","thermal"],"Answer":1},{"Type":0,"Question":"power formula?","AnswerChoices":["work/time","force \u00D7 distance","mass \u00D7 speed","voltage \u00D7 resistance"],"Answer":0},{"Type":0,"Question":"mirror that converges light?","AnswerChoices":["convex","concave","plane","none"],"Answer":1},{"Type":0,"Question":"mass \u00D7 gravity is?","AnswerChoices":["weight","force","energy","pressure"],"Answer":0},{"Type":0,"Question":"newton\u0027s first law is about?","AnswerChoices":["acceleration","action/reaction","inertia","force"],"Answer":2},{"Type":0,"Question":"heat transfer without medium?","AnswerChoices":["conduction","convection","radiation","evaporation"],"Answer":2},{"Type":0,"Question":"electricity flows due to?","AnswerChoices":["heat","voltage","current","resistance"],"Answer":1},{"Type":0,"Question":"short circuit occurs when?","AnswerChoices":["open circuit","high resistance","low resistance path","too many resistors"],"Answer":2},{"Type":0,"Question":"refraction occurs when?","AnswerChoices":["light bounces","light bends","light spreads","light reflects"],"Answer":1},{"Type":0,"Question":"light year is unit of?","AnswerChoices":["time","speed","distance","mass"],"Answer":2},{"Type":0,"Question":"sound travels fastest in?","AnswerChoices":["gas","liquid","solid","vacuum"],"Answer":2},{"Type":0,"Question":"who formulated laws of motion?","AnswerChoices":["einstein","newton","galileo","maxwell"],"Answer":1},{"Type":0,"Question":"energy of motion is?","AnswerChoices":["potential","kinetic","thermal","nuclear"],"Answer":1},{"Type":0,"Question":"unit of pressure?","AnswerChoices":["newton","pascal","joule","watt"],"Answer":1},{"Type":0,"Question":"area under velocity-time graph?","AnswerChoices":["distance","acceleration","force","power"],"Answer":0},{"Type":0,"Question":"device to measure current?","AnswerChoices":["voltmeter","ammeter","barometer","thermometer"],"Answer":1},{"Type":0,"Question":"coulomb is unit of?","AnswerChoices":["current","charge","voltage","resistance"],"Answer":1},{"Type":0,"Question":"a circuit with one path is?","AnswerChoices":["parallel","series","loop","open"],"Answer":1},{"Type":0,"Question":"law of conservation of energy means?","AnswerChoices":["energy disappears","energy is created","energy transforms","energy increases"],"Answer":2},{"Type":0,"Question":"function of fuse?","AnswerChoices":["increase voltage","reduce noise","protect circuit","store energy"],"Answer":2},{"Type":0,"Question":"friction always?","AnswerChoices":["aids motion","opposes motion","creates energy","none"],"Answer":1},{"Type":0,"Question":"echo is caused by?","AnswerChoices":["diffraction","reflection","refraction","interference"],"Answer":1},{"Type":0,"Question":"SI unit of temperature?","AnswerChoices":["fahrenheit","celsius","kelvin","joule"],"Answer":2},{"Type":0,"Question":"in a vacuum, sound?","AnswerChoices":["slows","accelerates","disappears","reflects"],"Answer":2},{"Type":0,"Question":"simple machine example?","AnswerChoices":["motor","lever","engine","gear"],"Answer":1},{"Type":0,"Question":"pressure formula?","AnswerChoices":["force/area","area \u00D7 force","mass \u00D7 volume","density \u00D7 velocity"],"Answer":0},{"Type":0,"Question":"battery provides?","AnswerChoices":["current","power","voltage","resistance"],"Answer":2},{"Type":0,"Question":"a neutral atom has?","AnswerChoices":["more protons","equal protons and electrons","more electrons","no neutrons"],"Answer":1}]}
+{
+  "OwnerQuizId": "6cef2072-f1e0-4739-8afe-0f367f247b78",
+  "Questions": [
+    {
+      "type": 0,
+      "title": "what is newton's second law?",
+      "choices": ["f=ma", "e=mc^2", "v=ir", "none of the above"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "unit of force?",
+      "choices": ["joule", "pascal", "newton", "watt"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "which of these is a vector quantity?",
+      "choices": ["mass", "speed", "velocity", "temperature"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "acceleration is defined as?",
+      "choices": ["distance/time", "velocity/time", "speed × time", "force/mass"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "speed of light in vacuum?",
+      "choices": ["3×10⁸ m/s", "1.5×10⁸ m/s", "3×10⁶ m/s", "9.8 m/s²"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "ohm's law relates voltage, current, and?",
+      "choices": ["power", "resistance", "energy", "force"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "work is defined as?",
+      "choices": ["force × time", "mass × velocity", "force × distance", "power × time"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "newton's third law says?",
+      "choices": ["f=ma", "objects stay at rest", "equal and opposite reaction", "momentum is conserved"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "SI unit of power?",
+      "choices": ["watt", "joule", "newton", "pascal"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "gravitational acceleration on earth?",
+      "choices": ["10 m/s²", "9.8 m/s²", "9 m/s²", "8.9 m/s²"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "momentum formula?",
+      "choices": ["mass × speed", "force × time", "mass × velocity", "velocity/time"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "if net force is zero, object is?",
+      "choices": ["accelerating", "at rest or constant velocity", "speeding up", "none of the above"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "resistance unit?",
+      "choices": ["ampere", "volt", "ohm", "watt"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "energy stored due to position?",
+      "choices": ["kinetic", "potential", "mechanical", "thermal"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "power formula?",
+      "choices": ["work/time", "force × distance", "mass × speed", "voltage × resistance"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "mirror that converges light?",
+      "choices": ["convex", "concave", "plane", "none"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "mass × gravity is?",
+      "choices": ["weight", "force", "energy", "pressure"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "newton's first law is about?",
+      "choices": ["acceleration", "action/reaction", "inertia", "force"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "heat transfer without medium?",
+      "choices": ["conduction", "convection", "radiation", "evaporation"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "electricity flows due to?",
+      "choices": ["heat", "voltage", "current", "resistance"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "short circuit occurs when?",
+      "choices": ["open circuit", "high resistance", "low resistance path", "too many resistors"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "refraction occurs when?",
+      "choices": ["light bounces", "light bends", "light spreads", "light reflects"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "light year is unit of?",
+      "choices": ["time", "speed", "distance", "mass"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "sound travels fastest in?",
+      "choices": ["gas", "liquid", "solid", "vacuum"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "who formulated laws of motion?",
+      "choices": ["einstein", "newton", "galileo", "maxwell"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "energy of motion is?",
+      "choices": ["potential", "kinetic", "thermal", "nuclear"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "unit of pressure?",
+      "choices": ["newton", "pascal", "joule", "watt"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "area under velocity-time graph?",
+      "choices": ["distance", "acceleration", "force", "power"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "device to measure current?",
+      "choices": ["voltmeter", "ammeter", "barometer", "thermometer"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "coulomb is unit of?",
+      "choices": ["current", "charge", "voltage", "resistance"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "a circuit with one path is?",
+      "choices": ["parallel", "series", "loop", "open"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "law of conservation of energy means?",
+      "choices": ["energy disappears", "energy is created", "energy transforms", "energy increases"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "function of fuse?",
+      "choices": ["increase voltage", "reduce noise", "protect circuit", "store energy"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "friction always?",
+      "choices": ["aids motion", "opposes motion", "creates energy", "none"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "echo is caused by?",
+      "choices": ["diffraction", "reflection", "refraction", "interference"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "SI unit of temperature?",
+      "choices": ["fahrenheit", "celsius", "kelvin", "joule"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "in a vacuum, sound?",
+      "choices": ["slows", "accelerates", "disappears", "reflects"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "simple machine example?",
+      "choices": ["motor", "lever", "engine", "gear"],
+      "answerIndex": 1
+    },
+    {
+      "type": 0,
+      "title": "pressure formula?",
+      "choices": ["force/area", "area × force", "mass × volume", "density × velocity"],
+      "answerIndex": 0
+    },
+    {
+      "type": 0,
+      "title": "battery provides?",
+      "choices": ["current", "power", "voltage", "resistance"],
+      "answerIndex": 2
+    },
+    {
+      "type": 0,
+      "title": "a neutral atom has?",
+      "choices": ["more protons", "equal protons and electrons", "more electrons", "no neutrons"],
+      "answerIndex": 1
+    }
+  ]
+}

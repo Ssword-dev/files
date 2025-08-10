@@ -1,11 +1,11 @@
 #pragma warning disable IDE0305 // The warnings about using a semantic sugar instead of toList()
-using Backend.FileSystemRecords;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using SystemFile = System.IO.File;
 using DatabaseQuizEntity = Backend.Database.QuizEntity;
 using DatabaseQuizTagEntity = Backend.Database.QuizTagEntity;
 using DatabaseQuizTagRelationEntity = Backend.Database.QuizTagRelationEntity;
+using Backend.Services;
 
 namespace Backend.Database;
 
@@ -90,13 +90,13 @@ public sealed class QuizAppDatabaseContext(DbContextOptions<QuizAppDatabaseConte
         return await Quizzes.Where(ent => ent.UniqueId.ToString() == id).FirstAsync(); // THERE CAN BE ONLY ONE
     }
 
-    public async Task<QuestionRecord?> GetQuestionsById(string id)
+    public async Task<QuestionRecordModel?> GetQuestionsById(string id)
     {
         try
         {
-            var fp = QuestionRecord.Resolve(RecordsDirectory, id);
+            var fp = QuestionRecordService.ResolveQuestionRecordPath(RecordsDirectory, id);
             var fileStream = SystemFile.OpenRead(fp);
-            return await QuestionRecord.FromJsonAsync(fileStream);
+            return await QuestionRecordService.QuestionRecordFromJsonAsync(fileStream);
         }
         catch (FileNotFoundException)
         {

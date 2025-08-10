@@ -1,7 +1,5 @@
-using Backend.Models;
 using Backend.Database;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers.Api.QuizApi;
 

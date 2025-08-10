@@ -1,8 +1,7 @@
 using Backend.Database;
-using Backend.FileSystemRecords;
 using Backend.Models;
+using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using SystemFile = System.IO.File;
 
 namespace Backend.Controllers.Api.QuizApi;
 
@@ -63,8 +62,8 @@ public class QuizApiCreationController(QuizAppDatabaseContext database) : QuizAp
         // phase 5: create question records
         // this automatically writes to filesystem btw.
         // uses QuestionRecord.Resolve(...)
-        var questionRecord = QuestionRecord.New(id, request.Questions);
-        await questionRecord.SaveAsync(QuizAppDatabaseContext.RecordsDirectory);
+        var questionRecord = QuestionRecordService.NewQuestionRecord(id, request.Questions);
+        await QuestionRecordService.SaveQuestionRecordAsync(questionRecord, QuizAppDatabaseContext.RecordsDirectory);
         // phase 6: Ok
         return Ok(quiz);
     }
