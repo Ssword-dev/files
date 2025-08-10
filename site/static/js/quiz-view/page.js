@@ -1,55 +1,44 @@
-// ! For those who are reading. no, you should not change
-// ! this function's name to anything other than `h`.
-// * For those wondering why, its called *hyperscript* convention.
-// * basically its that things that represents a vdom or a real dom
-// * should declare the functions (or should be imported) as `h`.
-// * but this `h` function is also a namespace (read docs).
-// * also this `h` thing is like just jsx... but not compiled so...
-// * but it works...
+// ! Keep the name `h` for hyperscript convention.
+// * See notes in original file for why this is used.
 import h from "../modules/dom-utils/index.js";
 import QuestionType from "../enum/question-type.js";
 
 class QuizViewPage {
+  queue = [];
+  timer = null;
+  timerDuration = 20;
+  responses = {};
+  stateNodes = { currentQuestion: null };
+  quizId = null;
+  questions = [];
+  display = null;
+  state = null;
+  timerTextEl = null;
+  timerHeaderEl = null;
+
   constructor() {
-    this.queue = [];
-    this.timer = null; // Promise<void> | null
-    this.timerDuration = 20;
-    this.stateNodes = {
-      currentQuestion: null,
-    }; // Record<string, HTMLElement | null>
+    const prerenderData = JSON.parse(
+      document.querySelector("#server-prerender-data").textContent || "",
+    );
 
-    this.responses = {}; // Record<number, object>
+    this.quizId = prerenderData.id;
+    this.questions = prerenderData.questions;
 
-    // * this data is not fragile
-    const prerenderScript = document.querySelector("#server-prerender-data");
-    const prerenderData = JSON.parse(prerenderScript.textContent || "");
-
-    this.quizId = prerenderData["id"];
-    this.questions = prerenderData["questions"];
-
-    // * uh so i dont have react. sadly. so i have
-    // * this mini reactive system (vue inspired).
-    // * basically it lets you subscribe to it to listen
-    // * for property changes. subscribing allows me to update
-    // * the ui.
-    // * see modules/dom-utils/reactive.js to see more.
     this.state = h.reactive({
       currentTimeLeft: this.timerDuration,
     });
+
+    this.display = document.querySelector("#display-container");
   }
 
   async main() {
-    const display = document.querySelector("#display-container");
-
-    display.appendChild(h(this.TimerDisplayElement));
-    display.appendChild(h(this.QuestionDisplayElement));
+    this.display.appendChild(h(this.TimerDisplayElement.bind(this)));
+    this.display.appendChild(h(this.QuestionDisplayElement.bind(this)));
   }
 
-  MultipleChoiceInputSource = ({ answerChoices, index }) => {
-    // * multiple choice input group
-    const inputSource = h.element("div", { class: "flex flex-col gap-2" });
-
-    const choiceElements = answerChoices.map((choice, choiceIndex) => {
+  MultipleChoiceInputSource({ choices, index }) {
+    const container = h.element("div", { class: "flex flex-col gap-2" });
+    choices.forEach((choice, choiceIndex) => {
       const choiceId = `q${index}-choice-${choiceIndex}`;
       const radio = h.element("input", {
         type: "radio",
@@ -58,14 +47,10 @@ class QuizViewPage {
         value: choiceIndex,
       });
 
-      // * on select, store the response
-      radio.addEventListener("change", () => {
-        this.responses[index] = {
-          type: QuestionType.MultipleChoice,
-          value: choiceIndex,
-          label: choice,
-        };
-      });
+      radio.addEventListener(
+        "change",
+        this.handleMultipleChoiceChange.bind(this, index, choiceIndex, choice),
+      );
 
       const label = h.element(
         "label",
@@ -73,185 +58,260 @@ class QuizViewPage {
         h.text(choice),
       );
 
-      const choiceWrapper = h.element(
-        "div",
-        { class: "flex items-center gap-2" },
-        radio,
-        label,
+      container.appendChild(
+        h.element("div", { class: "flex items-center gap-2" }, radio, label),
       );
-
-      return choiceWrapper;
     });
 
-    // * this could be done with a manual for-of, but this one
-    // * takes the least steps.
-    // * this creates a document fragment for the choices.
-    const fragment = h.fragment(...choiceElements);
-    inputSource.appendChild(fragment);
+    return container;
+  }
 
-    return inputSource;
-  };
+  handleMultipleChoiceChange(index, choiceIndex, choice) {
+    this.responses[index] = {
+      type: QuestionType.MultipleChoice,
+      value: choiceIndex,
+      label: choice,
+    };
+  }
 
-  OpenEndedInputSource = ({ className = "" }) => {
-    const inputSource = h("textarea", {
+  OpenEndedInputSource({ index, className = "" }) {
+    const textarea = h("textarea", {
       class: h.class("open-ended-textarea", className),
+      placeholder: "Write your answer here...",
+      rows: "4",
     });
 
-    inputSource.addEventListener("input", async () => {
-      const realHeight = await h.style.read(
-        inputSource,
-        (is) => is.scrollHeight,
-      );
+    textarea.addEventListener(
+      "input",
+      this.handleOpenEndedInput.bind(this, index, textarea),
+    );
 
-      await h.style.write(inputSource, (is) => {
-        is.style.height = "auto";
-        is.style.height = realHeight + "px";
-      });
+    return textarea;
+  }
+
+  async handleOpenEndedInput(index, textarea) {
+    const sh = await h.style.read(() => textarea.scrollHeight);
+    await h.style.reflow(() => {
+      textarea.style.height = "auto";
+    });
+    await h.style.write(() => {
+      textarea.style.height = `${sh}px`;
     });
 
-    return inputSource;
-  };
+    this.responses[index] = {
+      type: QuestionType.OpenEnded,
+      value: textarea.value,
+    };
+  }
 
-  // * component that renders a single question + its input
-  QuestionElement = ({ question }) => {
-    const { index, question: text, type, answerChoices } = question;
+  ShortAnswerInputSource({ index, className = "" }) {
+    const input = h("input", {
+      type: "text",
+      class: h.class("short-answer-input", className),
+      placeholder: "Type your answer here...",
+    });
 
-    // * wrapper for the whole question
+    input.addEventListener(
+      "input",
+      this.handleShortAnswerInput.bind(this, index, input),
+    );
+
+    return input;
+  }
+
+  handleShortAnswerInput(index, input) {
+    this.responses[index] = {
+      type: QuestionType.ShortAnswer,
+      value: input.value,
+    };
+  }
+
+  LongAnswerInputSource({ index, className = "" }) {
+    const textarea = h("textarea", {
+      class: h.class("long-answer-textarea", className),
+      placeholder: "Write your detailed answer here...",
+      rows: "6",
+    });
+
+    textarea.addEventListener(
+      "input",
+      this.handleLongAnswerInput.bind(this, index, textarea),
+    );
+
+    return textarea;
+  }
+
+  async handleLongAnswerInput(index, textarea) {
+    const sh = await h.style.read(() => textarea.scrollHeight);
+    await h.style.reflow(() => {
+      textarea.style.height = "auto";
+    });
+    await h.style.write(() => {
+      textarea.style.height = `${sh}px`;
+    });
+
+    this.responses[index] = {
+      type: QuestionType.LongAnswer,
+      value: textarea.value,
+    };
+  }
+
+  QuestionElement({ question }) {
+    // destructure props with expected JSON keys
+    const { index, title, type, choices } = question;
+
     const wrapper = h.element("div", {
       class: "flex flex-col gap-4 p-4 border rounded shadow",
       id: `question-${index}`,
     });
 
-    // * question text
-    const questionTextEl = h.element(
-      "h2",
-      { class: "text-lg font-semibold" },
-      h.text(text),
+    wrapper.appendChild(
+      h.element("h2", { class: "text-lg font-semibold" }, h.text(title)),
     );
 
-    wrapper.appendChild(questionTextEl);
+    let inputArea;
 
-    // * the input area varies depending on type
-    let inputArea = null;
-
-    if (type === QuestionType.MultipleChoice) {
-      inputArea = h(this.MultipleChoiceInputSource, {
-        answerChoices: answerChoices,
-        index: index,
-      });
-    } else {
-      const textInput = h(this.OpenEndedInputSource);
-      inputArea = textInput;
-    }
-
-    if (inputArea) {
-      wrapper.appendChild(inputArea);
-    }
-
-    return wrapper;
-  };
-
-  QuestionDisplayElement = () => {
-    const stack = this.questions.map((v, i) => ({
-      ...v,
-      index: i, // adds an index property for tracking.
-    }));
-    const slot = h.element("div", {}, h.text("Loading..."));
-    const display = h.element("div", {}, slot);
-    const headlessState = {
-      currentQuestion: null,
-    };
-
-    const runTimer = () =>
-      new Promise((resolve) => {
-        const iv = setInterval(() => {
-          // pre-increment
-          // this triggers timer change
-          // with very tiny latency cuz no diffing
-          // (YAAAAAAAAAAAAAAAAAAAAAAYYYYYY!)
-          this.state.currentTimeLeft--;
-          if (this.state.currentTimeLeft == 0) {
-            resolve(true);
-            clearTimeout(iv);
-          }
-        }, 1000);
-      });
-
-    const loop = async () => {
-      while (stack.length > 0) {
-        const currentQuestion = stack.shift();
-        headlessState.currentQuestion = currentQuestion;
-
-        // render question
-        h.style.reflow(() => {
-          display.innerHTML = "";
-          display.appendChild(
-            h(this.QuestionElement, { question: currentQuestion }),
-          );
+    switch (type) {
+      case QuestionType.MultipleChoice:
+        inputArea = h(this.MultipleChoiceInputSource.bind(this), {
+          choices,
+          index,
         });
-        this.state.currentTimeLeft = this.timerDuration;
+        break;
 
-        // wait for timer
-        await runTimer();
+      case QuestionType.ShortAnswer:
+        inputArea = h(this.ShortAnswerInputSource.bind(this), { index });
+        break;
 
-        // requeue if unanswered
-        // this loops for unanswered questions
-        // to let the user go back to questions
-        // kinda like duolingo style.
-        if (!this.responses[currentQuestion.index]) {
-          stack.push(currentQuestion);
-        }
-      }
+      case QuestionType.LongAnswer:
+        inputArea = h(this.LongAnswerInputSource.bind(this), { index });
+        break;
 
-      await finalize();
-    };
+      case QuestionType.OpenEnded:
+      default:
+        inputArea = h(this.OpenEndedInputSource.bind(this), { index });
+        break;
+    }
 
-    const finalize = async () => {
-      console.log(this.responses);
-    };
+    wrapper.appendChild(inputArea);
+    return wrapper;
+  }
 
-    loop();
+  ResultDisplay() {
+    const scoreText = h.element(
+      "div",
+      {
+        class:
+          "px-5 py-3 rounded-lg shadow-inner border bg-secondary text-main",
+        id: "score",
+      },
+      h.text("Loading..."),
+    );
+
+    const display = h.element(
+      "div",
+      {
+        class:
+          "flex flex-col items-center justify-center w-full p-6 rounded-xl shadow-lg gap-4 bg-primary text-main",
+      },
+      h.element("div", { class: "text-2xl font-bold" }, "Quiz Results"),
+      scoreText,
+    );
+
+    console.log(this.responses);
+
+    fetch("/q/site/api/quiz/check.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: this.quizId,
+        responses: this.responses,
+      }),
+    })
+      .then((resp) => resp.json())
+      .then((jsonBody) => {
+        console.log(jsonBody);
+        scoreText.innerText = jsonBody["score"];
+      })
+      .catch(console.error);
 
     return display;
-  };
+  }
 
-  TimerDisplayElement = () => {
-    const timerText = h.element("span", {});
-    const timerHeader = h.element(
+  QuestionDisplayElement() {
+    const stack = this.questions.map((v, i) => ({ ...v, index: i }));
+    const display = h.element("div", {}, h.text("Loading..."));
+
+    // kick off the loop
+    this.runQuestionLoop(display, stack);
+    return display;
+  }
+
+  async runQuestionLoop(display, stack) {
+    while (stack.length > 0) {
+      const currentQuestion = stack.shift();
+      await h.style.reflow(() => {
+        display.innerHTML = "";
+        display.appendChild(
+          h(this.QuestionElement.bind(this), { question: currentQuestion }),
+        );
+      });
+
+      this.state.currentTimeLeft = this.timerDuration;
+      await this.runTimer();
+
+      if (!this.responses[currentQuestion.index]) {
+        stack.push(currentQuestion);
+      }
+    }
+    await this.finalizeDisplay();
+  }
+
+  async runTimer() {
+    return new Promise((resolve) => {
+      const iv = setInterval(() => {
+        this.state.currentTimeLeft--;
+        if (this.state.currentTimeLeft <= 0) {
+          clearInterval(iv);
+          resolve();
+        }
+      }, 1000);
+    });
+  }
+
+  async finalizeDisplay() {
+    await h.style.reflow(() => {
+      this.display.innerHTML = "";
+      this.display.appendChild(h(this.ResultDisplay.bind(this)));
+    });
+  }
+
+  TimerDisplayElement() {
+    this.timerTextEl = h.element("span", {});
+    this.timerHeaderEl = h.element(
       "h1",
       {
-        class: h.class(
-          "self-center", // center self
-          "text-xl", // make self big font
-          "select-none", // make it not selectable
-          "quiz-timer", // used for targetting this in the raw css.
-        ),
+        class: h.class("self-center", "text-xl", "select-none", "quiz-timer"),
       },
-      timerText,
+      this.timerTextEl,
     );
 
-    function updateTimerText(state) {
-      h.style.reflow(function () {
-        timerText.innerText = `${state.currentTimeLeft} seconds left!`;
+    // subscribe to the state to update the timer.
+    h.subscribe(this.state, this.updateTimerText.bind(this));
+    this.updateTimerText(this.state);
+    return this.timerHeaderEl;
+  }
 
-        if (state.currentTimeLeft <= 5) {
-          // these adds dramatic effects.
-          // (see static/css/quiz/view.css)
-          timerHeader.classList.add("low-time");
-        } else {
-          timerHeader.classList.remove("low-time");
-        }
-      });
-    }
-
-    h.subscribe(this.state, updateTimerText);
-
-    updateTimerText(this.state);
-
-    return timerHeader;
-  };
-
-  DisplayElement = () => {};
+  updateTimerText(state) {
+    h.style.reflow(() => {
+      this.timerTextEl.innerText = `${state.currentTimeLeft} seconds left!`;
+      if (state.currentTimeLeft <= 5) {
+        this.timerHeaderEl.classList.add("low-time");
+      } else {
+        this.timerHeaderEl.classList.remove("low-time");
+      }
+    });
+  }
 }
 
 const app = new QuizViewPage();
