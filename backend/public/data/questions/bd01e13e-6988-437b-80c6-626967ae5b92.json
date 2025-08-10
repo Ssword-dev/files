@@ -5,13 +5,13 @@
       "type": 0,
       "title": "Which of these is a programming language?",
       "choices": ["HTML", "Python", "CSS", "JSON"],
-      "answerIndex": 1
+      "correctAnswerIndex": 1
     },
     {
       "type": 0,
       "title": "What does 'OOP' stand for?",
       "choices": ["Object-Oriented Programming", "Only One Program", "Open Output Processing", "Overloaded Operation Pointer"],
-      "answerIndex": 0
+      "correctAnswerIndex": 0
     },
     {
       "type": 2,
@@ -22,7 +22,7 @@
       "type": 0,
       "title": "Which symbol is used for comments in Python?",
       "choices": ["//", "#", "<!-- -->", "--"],
-      "answerIndex": 1
+      "correctAnswerIndex": 1
     },
     {
       "type": 3,
