@@ -1,4 +1,10 @@
-
+// disables warning about unnecessary pragma.
+// ! just annoying.
+#pragma warning disable IDE0079
+// disable classes not accessing attr or fields warning
+// ! NOT UNNECESSARY, THE LINTER WONT STOP COMPLAINING BOUT
+// ! IT.
+#pragma warning disable CA1822
 using Backend.Database;
 using Library.Commander;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -19,6 +25,9 @@ sealed class ServeCommand : Command
     {
         // register controller services
         builder.Services.AddControllers();
+
+        // this policy allows any frontend and backend to connect without CORS issues.
+        // the upside is no cors, the downside is, no cors. like, at all.
         builder.Services.AddCors(opts => opts.AddPolicy("AllowFrontendConnection", pol => pol.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
         builder.Services.AddDbContext<QuizAppDatabaseContext>(options =>
@@ -96,9 +105,13 @@ sealed class ServeCommand : Command
     /// </summary>
     public override async Task Main(Invocation invocation)
     {
+        // Create the builder
         var builder = WebApplication.CreateBuilder();
+
+        // Configure the builder
         ConfigureBuilder(builder);
 
+        // Build the server/app
         var app = BuildApplication(builder);
 
         // Configures the application itself
@@ -106,10 +119,15 @@ sealed class ServeCommand : Command
 
         // Setups middlewares... preferably logging
         SetupMiddlewares(app);
+
+        // Map all controllers
         MapControllers(app);
 
-        string addr = "http://0.0.0.0:4006";
+        string addr = "http://0.0.0.0:4006"; // default address.
 
+        // Allow url overrides
+        // invocation is the arguments, but
+        // unix style.
         if (invocation.InvocationArguments.Length >= 1)
         {
             addr = invocation.InvocationArguments[0];

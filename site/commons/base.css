@@ -1,5 +1,11 @@
 @import "./theme.css";
+
 @layer base {
+  * {
+    color: var(--color-main);
+    border-color: var(--color-main);
+  }
+
   textarea {
     resize: none;
     overflow-y: hidden;

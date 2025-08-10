@@ -1,26 +1,71 @@
-.quiz-timer.low-time {
-    transform-origin: center;
-    animation: timer-pulsate 0.8s ease-in-out infinite;
+@keyframes timer-pulsate {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.15);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  75% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
-@keyframes timer-pulsate {
-    0% {
-        transform: scale(1);
-    }
+.quiz-timer.low-time {
+  transform-origin: center;
+  animation: timer-pulsate 0.8s ease-in-out infinite;
+}
 
-    25% {
-        transform: scale(1.15);
-    }
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-primary);
+  margin: 0;
+  padding: 0;
+  color: var(--color-text);
+}
 
-    50% {
-        transform: scale(1);
-    }
+#form-body {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 40px auto;
+  padding: var(--padding-form);
+  background-color: var(--color-card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
 
-    75% {
-        transform: scale(1.15);
-    }
+label {
+  margin-left: 4px;
+}
 
-    100% {
-        transform: scale(1);
-    }
+input[type="radio"] {
+  appearance: none;
+  transform: scale(1.5);
+}
+
+input[type="radio"]::before {
+  content: "🔘";
+  /* font-size: 20px; */
+}
+
+input[type="radio"]:checked::before {
+  content: "🎯";
+}
+
+label:hover,
+input:hover + label {
+  color: var(--color-accent);
+  transform: scale(1.08);
+  transition: transform 300ms ease;
 }

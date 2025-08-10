@@ -7,6 +7,7 @@ import {
   createSymbolicComponent,
 } from "./factories";
 import { reactive, subscribe } from "./reactive";
+import style from "./style-utils";
 import symbols from "./symbols";
 
 /**
@@ -56,7 +57,7 @@ utils.text = function text(s) {
 utils.element = function element(type, ...args) {
   if (typeof type !== "string") {
     throw new SemanticFunctionError(
-      "`utils.element` should only be used to create intrinsic elements!"
+      "`utils.element` should only be used to create intrinsic elements!",
     );
   }
 
@@ -80,5 +81,6 @@ utils.root = utils.fragment;
 utils.class = cls;
 utils.reactive = reactive;
 utils.subscribe = subscribe;
+utils.style = style;
 
 export default utils;

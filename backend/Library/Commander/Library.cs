@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Library.Commander;
 
 /// <summary>
@@ -112,8 +110,11 @@ public abstract class CommanderProgram<P> where P : ArgumentParserBase, new()
             return;
         }
 
+        // * strips the parts where the subcommands are specified
+        // ! DO NOT REMOVE
         var remainingArgs = argv.Skip(depth).ToArray();
 
+        // * the parser gives the semantic meaning to the arguments.
         var parsed = parser.Parse(applicationInvocationPath, remainingArgs);
         await command.Invoke(parsed);
     }

@@ -1,5 +1,7 @@
 import { BaseError } from "./bases.js";
-class InvalidClassCandidateError extends BaseError {}
+class InvalidClassCandidateError extends BaseError {
+  /** super */
+}
 class SemanticFunctionError extends BaseError {
   /** super */
 }
