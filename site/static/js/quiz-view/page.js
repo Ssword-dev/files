@@ -6,7 +6,7 @@ import QuestionType from "../enum/question-type.js";
 class QuizViewPage {
   queue = [];
   timer = null;
-  timerDuration = 20;
+  timerDuration = 10;
   responses = {};
   stateNodes = { currentQuestion: null };
   quizId = null;
@@ -160,13 +160,15 @@ class QuizViewPage {
     // destructure props with expected JSON keys
     const { index, title, type, choices } = question;
 
-    const wrapper = h.element("div", {
-      class: "flex flex-col gap-4 p-4 border rounded shadow",
+    const backdropWrapper = h.element("div", {
+      class: "flex flex-col justify-center align-center self-center gap-4 w-full h-full border rounded shadow",
       id: `question-${index}`,
     });
 
+    const wrapper = h.element("div", {class: "flex flex-col w-2/5 sm:w-5/6 h-3/5 sm:w-4/5 justify-center align-center self-center"})
+
     wrapper.appendChild(
-      h.element("h2", { class: "text-lg font-semibold" }, h.text(title)),
+      h.element("h2", { class: "text-[2rem] font-semibold" }, h.text(title)),
     );
 
     let inputArea;
@@ -194,7 +196,8 @@ class QuizViewPage {
     }
 
     wrapper.appendChild(inputArea);
-    return wrapper;
+    backdropWrapper.appendChild(wrapper);
+    return backdropWrapper;
   }
 
   ResultDisplay() {
@@ -240,7 +243,7 @@ class QuizViewPage {
 
   QuestionDisplayElement() {
     const stack = this.questions.map((v, i) => ({ ...v, index: i }));
-    const display = h.element("div", {}, h.text("Loading..."));
+    const display = h.element("div", {class:"flex flex-col justify-center align-center h-full w-full"}, h.text("Loading..."));
 
     // kick off the loop
     this.runQuestionLoop(display, stack);

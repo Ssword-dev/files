@@ -33,18 +33,6 @@ body {
   color: var(--color-text);
 }
 
-#form-body {
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-  margin: 40px auto;
-  padding: var(--padding-form);
-  background-color: var(--color-card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-}
-
 label {
   margin-left: 4px;
 }

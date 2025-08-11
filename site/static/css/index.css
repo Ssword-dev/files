@@ -1,9 +1,2 @@
 @import url("./tailwind.css");
 /* the css for the whole site */
-
-body {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-}

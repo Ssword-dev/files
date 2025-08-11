@@ -10,15 +10,15 @@
   <link rel="stylesheet" href="../../static/css/quiz/view.css">
 </head>
 
-<body>
-  <div id="form-body">
+<body class="flex flex-col justify-center align-center h-screen w-screen">
+  <div id="form-body" class="flex flex-col justify-center align-center h-screen w-screen">
     <!-- <div id="identity">
       <div class="identity-text-field">
         <label for="identity-field-name" class="identity-text-field-label">Your Name</label>
         <input type="text" id="identity-field-name" class="identity-text-field-input">
       </div>
     </div> -->
-    <div id="display-container" class="flex flex-col gap-3 m-5">
+    <div id="display-container" class="flex flex-col gap-3 self-center w-4/5 sm:w-5/6 h-4/5 sm:5/6">
       <!-- javascript will insert elements here -->
     </div>
 
