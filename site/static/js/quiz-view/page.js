@@ -161,11 +161,15 @@ class QuizViewPage {
     const { index, title, type, choices } = question;
 
     const backdropWrapper = h.element("div", {
-      class: "flex flex-col justify-center align-center self-center gap-4 w-full h-full border rounded shadow",
+      class:
+        "flex flex-col justify-center align-center self-center gap-4 w-full h-full border rounded shadow",
       id: `question-${index}`,
     });
 
-    const wrapper = h.element("div", {class: "flex flex-col w-2/5 sm:w-5/6 h-3/5 sm:w-4/5 justify-center align-center self-center"})
+    const wrapper = h.element("div", {
+      class:
+        "flex flex-col w-2/5 sm:w-5/6 h-3/5 sm:w-4/5 justify-center align-center self-center",
+    });
 
     wrapper.appendChild(
       h.element("h2", { class: "text-[2rem] font-semibold" }, h.text(title)),
@@ -243,7 +247,11 @@ class QuizViewPage {
 
   QuestionDisplayElement() {
     const stack = this.questions.map((v, i) => ({ ...v, index: i }));
-    const display = h.element("div", {class:"flex flex-col justify-center align-center h-full w-full"}, h.text("Loading..."));
+    const display = h.element(
+      "div",
+      { class: "flex flex-col justify-center align-center h-full w-full" },
+      h.text("Loading..."),
+    );
 
     // kick off the loop
     this.runQuestionLoop(display, stack);

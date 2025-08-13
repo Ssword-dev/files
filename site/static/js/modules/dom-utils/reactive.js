@@ -56,4 +56,26 @@ function reactive(obj) {
   return proxy;
 }
 
-export { reactive, subscribe, symbols };
+function state(initialValue) {
+  const _internalProxy = reactive({ value: initialValue });
+
+  const setState = (argv0) => {
+    _internalProxy.value =
+      typeof argv0 === "function" ? argv0(_internalProxy.value) : argv0;
+  };
+
+  const subscribeFn = (fn) => {
+    const wrapped = (proxy) => fn(proxy.value);
+    subscribe(_internalProxy, wrapped);
+
+    fn(_internalProxy.value);
+
+    return () => {
+      _internalProxy[symbols.REACTIVE_LISTENERS_SYMBOL].delete(wrapped);
+    };
+  };
+
+  return [subscribeFn, setState];
+}
+
+export { reactive, subscribe, state, symbols };
