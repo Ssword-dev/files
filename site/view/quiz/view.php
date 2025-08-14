@@ -33,50 +33,50 @@
   answers... like... you just have to know json.
   -->
   <script type="application/json" id="server-prerender-data">
-    <?php
-    $quizId = $_GET['id'] ?? null;
-    $questions = [];
+      <?php
+      $quizId = $_GET['id'] ?? null;
+      $questions = [];
 
-    if ($quizId) {
-      $ch = curl_init("http://localhost:4006/api/quiz/questions/$quizId");
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      $response = curl_exec($ch);
-      curl_close($ch);
+      if ($quizId) {
+        $ch = curl_init("http://localhost:4006/api/quiz/questions/$quizId");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-      if ($response) {
-        $data = json_decode($response, true);
-        if (isset($data['questions']) && is_array($data['questions'])) {
-          $questions = $data['questions'];
-          $stack = [];
-          foreach ($questions as $q) {
-            $newQuestion = [];
+        if ($response) {
+          $data = json_decode($response, true);
+          if (isset($data['questions']) && is_array($data['questions'])) {
+            $questions = $data['questions'];
+            $stack = [];
+            foreach ($questions as $q) {
+              $newQuestion = [];
 
-            foreach ($q as $key => $val) {
-              if ($key === 'answer') {
-                continue; // skip 'answer' key
+              foreach ($q as $key => $val) {
+                if ($key === 'answer') {
+                  continue; // skip 'answer' key
+                }
+
+                $newQuestion[$key] = $val;
               }
 
-              $newQuestion[$key] = $val;
+              $stack[] = $newQuestion;
             }
 
-            $stack[] = $newQuestion;
+            echo json_encode([
+              "id" => $quizId,
+              "questions" => $stack
+            ]);
           }
-
-          echo json_encode([
-            "id" => $quizId,
-            "questions" => $stack
-          ]);
         }
       }
-    }
 
-    ?>
+      ?>
   </script>
 
   <!--
   This is the actual script the page uses (:
   it renders quizzes and their choices.
   -->
-  <script src="../../static/js/quiz-view/page.js" type="module" async></script>
+  <script src="../../static/js/view/quiz/view-page/page.js" type="module" async></script>
   <script src="../../hot-reload-client.js"></script>
 </body>

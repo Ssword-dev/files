@@ -1,7 +1,7 @@
 // ! Keep the name `h` for hyperscript convention.
 // * See notes in original file for why this is used.
-import h from "../modules/dom-utils/index.js";
-import QuestionType from "../enum/question-type.js";
+import h from "../../../modules/dom-utils/index.js";
+import QuestionType from "../../../enum/question-type.js";
 
 class QuizViewPage {
   queue = [];

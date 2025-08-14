@@ -3,7 +3,7 @@
 (EN)
 This file contains the configuration for the
 components. mostly used as the base or default styles.
-to customize how they look, i use tailwind to
+To customize how they look, I use Tailwind to
 apply utility classes to override the styles here.
 
 (TL-PH / Tagalog)
@@ -16,52 +16,49 @@ na nagsasapaw sa mga style dito.
 
 */
 
+/* === Light mode (Solar theme) base === */
 @theme inline {
-  /* light mode | no preference */
-
-  /* Non color stuff */
+  /* Non-color stuff */
   --radius-base: 4px;
   --radius-sharp: 0px;
   --radius-moderate: 4px;
   --radius-input: 8px;
 
-  /* Colors */
-  --color-primary: oklch(80% 0 0);
-  --color-secondary: oklch(40% 0 0); /*  */
-  --dim-muted: 80%; /* when stuff is disabled, it dims by 20% */
+  /* Solar color palette */
+  --color-primary: oklch(85% 0.12 80deg); /* warm golden yellow */
+  --color-secondary: oklch(65% 0.1 50deg); /* warm earthy orange */
+  --dim-muted: 80%; /* dimmed for disabled */
 
-  /* Used for color blending between primary and secondary */
-  --color-blend: oklch(60% 0 0); /* somewhere in between */
+  /* Used for blending */
+  --color-blend: oklch(75% 0.11 65deg); /* in-between warm blend */
 
-  --color-main: oklch(10% 0 0); /* main foreground */
-  --color-subtle: oklch(65% 0 0); /* like... subtle... */
+  --color-main: oklch(20% 0.02 70deg); /* dark warm brown text */
+  --color-subtle: oklch(50% 0.04 70deg); /* warm soft text */
 
-  --color-shadow: oklch(30% 100 / 0.08); /* primary shadow */
-  --color-shadow-blend: oklch(40% 90 / 0.08); /* secondary/blend shadow */
+  --color-shadow: oklch(35% 0.05 50deg / 0.08); /* warm soft shadow */
+  --color-shadow-blend: oklch(45% 0.05 60deg / 0.08); /* blended shadow */
 
-  /* User feedback, good feedback may induce serotonin. */
-  --color-accent: oklch(70% 0.4 290deg);
+  /* User feedback */
+  --color-accent: oklch(70% 0.15 100deg); /* sunny green accent */
   --brightness-highlight: 120%;
 }
 
+/* === Dark mode (Lunar theme) overrides === */
 @media (prefers-color-scheme: dark) {
   @theme inline {
-    /* dark mode overrides */
-    --color-primary: oklch(20% 0 0);
-    --color-secondary: oklch(60% 0 0);
-    --color-muted: oklch(
-      55% 0 0
-    ); /* background for like disabled... stuff... */
+    --color-primary: oklch(35% 0.05 240deg); /* cool desaturated blue */
+    --color-secondary: oklch(55% 0.05 260deg); /* pale moonlit lavender */
+    --color-muted: oklch(55% 0.02 250deg);
 
-    /* Used for color blending between primary and secondary */
-    --color-blend: oklch(40% 0 0); /* somewhere in between */
+    --color-blend: oklch(45% 0.05 250deg); /* between primary/secondary */
 
-    --color-main: oklch(90% 0 0); /* main foreground */
-    --color-subtle: oklch(35% 0 0); /* like... subtle... */
+    --color-main: oklch(92% 0.02 250deg); /* near-white moonlight text */
+    --color-subtle: oklch(70% 0.03 250deg); /* softer gray-blue text */
 
-    --color-shadow: oklch(100% 100 / 0.08); /* primary shadow */
-    --color-shadow-blend: oklch(
-      80% 90 / 0.08
-    ); /* acts like secondary shadow. for blending. */
+    --color-shadow: oklch(15% 0.02 250deg / 0.08); /* cool dark shadow */
+    --color-shadow-blend: oklch(25% 0.03 260deg / 0.08); /* blended shadow */
+
+    --color-accent: oklch(75% 0.12 270deg); /* gentle violet highlight */
+    --brightness-highlight: 115%;
   }
 }

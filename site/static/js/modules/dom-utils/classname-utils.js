@@ -1,4 +1,5 @@
 import { InvalidClassCandidateError } from "./errors";
+
 function cls(...args) {
   const self = cls;
   let classes = "";
