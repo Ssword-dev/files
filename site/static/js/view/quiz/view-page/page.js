@@ -162,7 +162,7 @@ class QuizViewPage {
 
     const backdropWrapper = h.element("div", {
       class:
-        "flex flex-col justify-center align-center self-center gap-4 w-full h-full border rounded shadow",
+        "flex flex-col justify-center align-center self-center gap-4 w-full h-full rounded shadow",
       id: `question-${index}`,
     });
 
@@ -302,7 +302,7 @@ class QuizViewPage {
     this.timerHeaderEl = h.element(
       "h1",
       {
-        class: h.class("self-center", "text-xl", "select-none", "quiz-timer"),
+        class: h.class("self-center", "text-xl", "select-none", "mt-10", "quiz-timer"),
       },
       this.timerTextEl,
     );

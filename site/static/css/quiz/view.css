@@ -57,3 +57,7 @@ input:hover + label {
   transform: scale(1.08);
   transition: transform 300ms ease;
 }
+
+#display-container {
+  filter:saturate(80%);
+}
