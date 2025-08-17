@@ -1,64 +1,56 @@
 /*
+EN: Component theme configuration. 
+Base/default styles live here; Tailwind utilities override as needed.
 
-(EN)
-This file contains the configuration for the
-components. mostly used as the base or default styles.
-To customize how they look, I use Tailwind to
-apply utility classes to override the styles here.
-
-(TL-PH / Tagalog)
-Ang file na ito ay naglalaman ng configuration
-para sa mga component. Karaniwan itong ginagamit
-bilang base o default na estilo (styles).
-Para i-customize ang itsura nila, ginagamit ko
-ang Tailwind para mag-apply ng utility classes
-na nagsasapaw sa mga style dito.
-
+TL-PH: Configuration ng tema para sa components.
+Dito nakalagay ang base/default na estilo; 
+gagamitin ang Tailwind utilities para mag-override kapag kinakailangan.
 */
 
-/* === Light mode (Solar theme) base === */
+/* === Solar (Light) Theme === */
 @theme inline {
-  /* Non-color stuff */
+  /* border radii */
   --radius-base: 4px;
   --radius-sharp: 0px;
-  --radius-moderate: 4px;
+  --radius-moderate: 6px;
   --radius-input: 8px;
 
-  /* Solar color palette */
-  --color-primary: oklch(85% 0.12 80deg); /* warm golden yellow */
-  --color-secondary: oklch(65% 0.1 50deg); /* warm earthy orange */
-  --dim-muted: 80%; /* dimmed for disabled */
+  /* solar palette */
+  --color-primary: oklch(85% 0.12 80deg); /* bright golden yellow */
+  --color-secondary: oklch(65% 0.1 50deg); /* warm amber/orange */
+  --color-muted: oklch(75% 0.03 80deg); /* soft muted beige */
 
-  /* Used for blending */
-  --color-blend: oklch(75% 0.11 65deg); /* in-between warm blend */
+  --color-blend: oklch(78% 0.09 65deg); /* in-between warm blend */
 
-  --color-main: oklch(20% 0.02 70deg); /* dark warm brown text */
-  --color-subtle: oklch(50% 0.04 70deg); /* warm soft text */
+  --color-main: oklch(22% 0.02 70deg); /* dark brown text */
+  --color-subtle: oklch(48% 0.04 70deg); /* warm midtone text */
 
-  --color-shadow: oklch(35% 0.05 50deg / 0.08); /* warm soft shadow */
-  --color-shadow-blend: oklch(45% 0.05 60deg / 0.08); /* blended shadow */
+  --color-shadow: oklch(35% 0.05 60deg / 0.08);
+  --color-shadow-blend: oklch(45% 0.06 65deg / 0.08);
 
-  /* User feedback */
-  --color-accent: oklch(70% 0.15 100deg); /* sunny green accent */
+  /* feedback */
+  --color-accent: oklch(72% 0.14 120deg); /* sunny green accent */
   --brightness-highlight: 120%;
 }
 
-/* === Dark mode (Lunar theme) overrides === */
+/* === Lunar (Dark) Theme === */
 @media (prefers-color-scheme: dark) {
   @theme inline {
-    --color-primary: oklch(35% 0.05 240deg); /* cool desaturated blue */
-    --color-secondary: oklch(55% 0.05 260deg); /* pale moonlit lavender */
-    --color-muted: oklch(55% 0.02 250deg);
+    --color-primary: oklch(40% 0.06 240deg); /* cool moon blue */
+    --color-secondary: oklch(55% 0.05 260deg); /* pale lavender */
+    --color-action: oklch(40% 0.06 240deg);
+    --color-muted: oklch(60% 0.02 250deg); /* soft gray-blue */
 
-    --color-blend: oklch(45% 0.05 250deg); /* between primary/secondary */
+    --color-blend: oklch(48% 0.05 250deg); /* in-between moonlight */
 
-    --color-main: oklch(92% 0.02 250deg); /* near-white moonlight text */
-    --color-subtle: oklch(70% 0.03 250deg); /* softer gray-blue text */
+    --color-main: oklch(92% 0.02 250deg); /* near-white text */
+    --color-subtle: oklch(72% 0.03 250deg); /* gentle soft gray-blue */
 
-    --color-shadow: oklch(15% 0.02 250deg / 0.08); /* cool dark shadow */
-    --color-shadow-blend: oklch(25% 0.03 260deg / 0.08); /* blended shadow */
+    --color-shadow: oklch(15% 0.02 250deg / 0.08);
+    --color-shadow-blend: oklch(25% 0.03 260deg / 0.08);
 
-    --color-accent: oklch(75% 0.12 270deg); /* gentle violet highlight */
+    /* feedback */
+    --color-accent: oklch(75% 0.12 270deg); /* violet highlight */
     --brightness-highlight: 115%;
   }
 }

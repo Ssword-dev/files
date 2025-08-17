@@ -1,5 +1,3 @@
-import { evtToSpecCompat } from "./events";
-
 function createIntrinsicElement(type, properties = {}, ...children) {
   const node = document.createElement(type);
 
@@ -36,7 +34,11 @@ function createFunctionalComponentElement(type, properties = {}, ...children) {
   /** @type {Record<string, any>} */
   const newProps = {};
   Object.assign(newProps, properties, { children });
-  return type(newProps);
+  return {
+    type: type,
+    properties: newProps,
+    children: children,
+  };
 }
 
 // symbolic components

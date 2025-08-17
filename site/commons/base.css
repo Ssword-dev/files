@@ -23,8 +23,20 @@
     padding-inline: 0;
   }
 
+  /* remove the increment/decrement icon thing. it pains me to look at it. */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
   a:hover,
   a:visited {
-    color: var(--);
+    color: var(--color-accent);
   }
 }

@@ -4,6 +4,6 @@ module.exports = {
     // "postcss-preset-env": {
     //   stage: 1,
     // },
-    cssnano: {}, // if you want minification
+    cssnano: {},
   },
 };

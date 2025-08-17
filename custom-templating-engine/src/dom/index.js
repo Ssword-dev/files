@@ -6,7 +6,7 @@ import {
   createIntrinsicElement,
   createSymbolicComponent,
 } from "./factories";
-import { reactive, subscribe } from "./reactive";
+import { reactive, subscribe } from "../reactive";
 import style from "./style-utils";
 import symbols from "./symbols";
 

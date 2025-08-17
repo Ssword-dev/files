@@ -1,108 +1,124 @@
 <?php
 
-$exc = null;
-$rawStringInput = "";
-$rawIntInput = 0;
-$empty = false;
+// this page is fully SSR-based. unlike the quiz
+// view one which is partial SSR+client work.
 
-function main()
+class PalindromeTester
 {
-    global $rawStringInput, $rawIntInput, $empty, $exc;
-    if (isset($_POST['number-input'])) {
-        $rawStringInput = $_POST['number-input'];
+    public array $whiteSpaceCharacters = [' ', "\n", "\r", "\t", "\v"];
 
-        if (trim($rawStringInput) == '') {
-            $empty = true;
-            return;
+    public function __construct()
+    {
+    }
+
+    public function stripAllWhiteSpaces(string $input): string
+    {
+        return str_replace($this->whiteSpaceCharacters, '', $input);
+    }
+
+    public function icasecmp(string $s1, string $s2): bool
+    {
+        return strtolower($s1) === strtolower($s2);
+    }
+
+    public function test(string $input): bool
+    {
+        $spInput = $this->stripAllWhiteSpaces($input);
+        $sprInput = $this->stripAllWhiteSpaces(strrev($input));
+
+        return $this->icasecmp($spInput, $sprInput);
+    }
+}
+
+class AppState
+{
+    public ?Throwable $exc = null;
+    public ?string $rawStringInput = null;
+    public bool $empty = false;
+
+    public function __construct()
+    {
+    }
+}
+
+class App
+{
+    private AppState $state;
+    private PalindromeTester $palindromeTester;
+
+    public function __construct()
+    {
+        $this->state = new AppState();
+        $this->palindromeTester = new PalindromeTester();
+    }
+
+    public function setInput(string $userInput): void
+    {
+        $trimmedInput = trim($userInput);
+
+        if ($trimmedInput === '') {
+            $this->state->empty = true;
         }
 
-        $empty = false;
+        $this->state->rawStringInput = $userInput;
+    }
 
-        try {
-            $rawIntInput = (int) $rawStringInput;
-        } catch (Throwable $_exc) {
-            $exc = $_exc;
+    public function displayResult(): string
+    {
+        $input = $this->state->rawStringInput;
+
+        if ($this->state->empty || $input === null) {
+            return <<<HTML
+                <!-- There is only emptiness. -->
+                <span>input something.</span>
+                HTML;
         }
 
-    }
-}
-
-
-function toRomanOnes($number)
-{
-    $current = $number % 10; // ones place
-
-    if ($current === 0) {
-        return '';
-    } elseif ($current <= 3) {
-        return str_repeat("I", $current);
-    } elseif ($current === 4) {
-        return "IV";
-    } elseif ($current === 9) {
-        return "IX";
-    } else {
-        return "V" . str_repeat("I", $current - 5);
-    }
-}
-
-function toRomanTens($number)
-{
-    // this part is a clever trick... it gets
-    // shifts the decimal part one to the right.
-    // so now the ONE's place is the TENTH's place.
-    $tenths = floor($number / 10) % 10; // tens place
-
-    if ($tenths === 0) {
-        return '';
-    } elseif ($tenths <= 3) {
-        return str_repeat("X", $tenths);
-    } elseif ($tenths === 4) {
-        return "XL";
-    } elseif ($tenths === 9) {
-        return "XC";
-    } else {
-        return "L" . str_repeat("X", $tenths - 5);
-    }
-}
-
-function toRoman($number)
-{
-    if (!is_int($number) || $number < 0) {
-        return null; // only non-negative integers allowed
+        $isPalindrome = $this->palindromeTester->test($input);
+        return $isPalindrome
+            ?
+            <<<HTML
+            <!-- This is a palindrome -->
+            <span class='text-5xl font-bold text-green-600'>It is a Palindrome</span>
+            HTML
+            :
+            <<<HTML
+            <!-- This is not a palindrome -->
+            <span class='text-5xl font-bold text-red-600'>Not a Palindrome</span>
+            HTML;
     }
 
-    if ($number === 100) {
-        return 'C';
+    public function displayFunFacts(): string
+    {
+        return <<<HTML
+            <ul class="mt-4 text-sm italic text-gray-600 space-y-1">
+                <li>Did you know? "racecar" and "madam" are classic palindromes.</li>
+                <li>The word "palindrome" comes from Greek roots meaning "running back again".</li>
+                <li>Even numbers can be palindromes: 12321, 4554.</li>
+                <li>Fun fact: The year 2002 was a palindrome year!</li>
+            </ul>
+        HTML;
     }
 
-    return toRomanTens($number) . toRomanOnes($number);
-
-}
-
-function displayResult()
-{
-    global $rawStringInput, $rawIntInput, $empty, $exc;
-    if (!is_int($rawIntInput)) {
-        return "Invalid.";
-    }
-    if ($empty) {
-        return "Please input something.";
+    public function getRawInput(): ?string
+    {
+        return $this->state->rawStringInput;
     }
 
-    if ($rawIntInput !== null) {
-        return (string) toRoman($rawIntInput);
-    } else {
-        if ($exc !== null) {
-            return $exc->getMessage();
-        } else {
-            return "An unknown error has occured.";
+    public function throwLastException(): void
+    {
+        if ($this->state->exc !== null) {
+            throw $this->state->exc;
         }
     }
 }
 
-main();
+$app = new App();
+
+if (isset($_POST['word-input'])) {
+    $app->setInput($_POST['word-input']);
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -110,72 +126,37 @@ main();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Roman Numeral Converter</title>
+    <title>Palindrome Checker</title>
     <link rel="stylesheet" href="../../static/css/index.css" />
 </head>
 
-<body class="bg-muted h-screen w-screen [*]:outline [*]:outline-1 [*]:outline-red">
+<body class="bg-muted h-screen w-screen">
     <div id="root" class="flex flex-col items-center justify-center bg-secondary h-full w-full">
 
         <main id="main-content" class="flex flex-col justify-center align-center h-full w-full">
+            <div data-preset="card" class="self-center h-3/5 w-3/5 bg-primary shadow-lg rounded-xl p-6">
+                <h1 class="card-title text-2xl font-bold mb-4 text-center">Palindrome Checker</h1>
 
-            <!-- left panel: form
-            <section class="
-            flex-1 flex flex-col justify-center to-r p-4 rounded shadow
-            bg-gradient-to-r from-primary to-blend
-            ">
-                <form id="number-to-roman-converter" class="flex flex-col gap-4" method="POST">
-                    <div class="action-input flex flex-row">
-                        <input name="number-input" id="number-input" type="number" min="0" max="1000"
-                            class="flex-1 border border-gray-400 rounded-l px-2 py-1"
-                            value="<?= htmlspecialchars((string) $rawIntInput ?? '') ?>" />
-                        <button type="submit"
-                            class="bg-primary border border-gray-400 border-l-0 rounded-r px-3 py-1 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-arrow-down-up">
-                                <path d="m3 16 4 4 4-4" />
-                                <path d="M7 20V4" />
-                                <path d="m21 8-4-4-4 4" />
-                                <path d="M17 4v16" />
-                            </svg>
-                        </button>
-                    </div>
+                <form class="action-input flex flex-row justify-center mb-6" method="POST">
+                    <input name="word-input" id="word-input" type="text" placeholder="Enter a word or phrase..."
+                        class="flex-1 border border-gray-400 rounded-l px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value="<?= htmlspecialchars((string) ($app->getRawInput() ?? '')) ?>" />
+
+                    <button type="submit"
+                        class="bg-accent hover:brightness-highlight text-white border border-gray-400 border-l-0 rounded-r px-4 py-2 flex items-center justify-center">
+                        Check
+                    </button>
                 </form>
-            </section> -->
 
-            <!-- right panel: output -->
-
-            <div data-preset="card" class="self-center h-3/5 w-3/5 bg-primary">
-                <h1 class="card-title">Roman Numeral Converter</h1>
-                <div class="card-body">
-
-                    <div class="action-input flex flex-row">
-                        <input name="number-input" id="number-input" type="number" min="0" max="1000"
-                            class="flex-1 border border-gray-400 rounded-l px-2 py-1"
-                            value="<?= htmlspecialchars((string) $rawIntInput ?? '') ?>" />
-                        <button type="submit"
-                            class="bg-primary border border-gray-400 border-l-0 rounded-r px-3 py-1 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-arrow-down-up">
-                                <path d="m3 16 4 4 4-4" />
-                                <path d="M7 20V4" />
-                                <path d="m21 8-4-4-4 4" />
-                                <path d="M17 4v16" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div class="card-subtext">
-                        <span><?= displayResult() ?></span>
-                    </div>
+                <div class="text-center">
+                    <!-- shorthands for echoing the result. -->
+                    <?= $app->displayResult() ?>
+                    <?= $app->displayFunFacts() ?>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- dev hot reload -->
     <script src="../../hot-reload-client.js"></script>
 </body>
 

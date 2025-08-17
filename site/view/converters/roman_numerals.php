@@ -1,190 +1,327 @@
 <?php
 
-$exc = null;
-$rawStringInput = "";
-$rawIntInput = 0;
-$empty = false;
-
-function main()
+class RomanConverter
 {
-    global $rawStringInput, $rawIntInput, $empty, $exc;
-    if (isset($_POST['number-input'])) {
-        $rawStringInput = $_POST['number-input'];
 
-        if (trim($rawStringInput) == '') {
-            $empty = true;
+    private function __construct()
+    {
+    }
+
+    /**
+     * an associative array mapping translation:value pairs.
+     * @var array
+     */
+    private static array $map = [
+        'M' => 1000,
+        'CM' => 900,
+        'D' => 500,
+        'CD' => 400,
+        'C' => 100,
+        'XC' => 90,
+        'L' => 50,
+        'XL' => 40,
+        'X' => 10,
+        'IX' => 9,
+        'V' => 5,
+        'IV' => 4,
+        'I' => 1,
+    ];
+
+    // convert int -> roman
+    public function toRoman(int $num): string
+    {
+        if ($num <= 0 || $num > 1000) {
+            throw new InvalidArgumentException("Number must be between 1 and 1000");
+        }
+
+        $result = '';
+        foreach (RomanConverter::$map as $roman => $value) {
+            while ($num >= $value) {
+                $result .= $roman;
+                $num -= $value;
+            }
+        }
+        return $result;
+    }
+
+    // convert roman -> int
+    public static function fromRoman(string $roman): int
+    {
+        $roman = strtoupper(trim($roman));
+
+        // variables to track
+        $i = 0;
+        $value = 0;
+
+        // iterates through the map
+        foreach (RomanConverter::$map as $symbol => $nv) {
+            // if the symbol is in the range [i, i+strlen($symbol)]
+            // then add its value.
+            while (substr($roman, $i, strlen($symbol)) === $symbol) {
+                $value += $nv;
+                $i += strlen($symbol);
+            }
+        }
+
+        return $value;
+    }
+
+    // singleton pattern
+    // internal instance
+    private static ?RomanConverter $_instance = null;
+
+    // provide a way to access from other classes.
+    public static function instance(): RomanConverter
+    {
+        if (RomanConverter::$_instance === null) {
+            RomanConverter::$_instance = new RomanConverter();
+        }
+        return RomanConverter::$_instance;
+    }
+}
+
+class AppState
+{
+    /**
+     * Any throwable or null if not set.
+     * This is what gets thrown if App::throwLastException.
+     * @var ?Throwable
+     */
+    public ?Throwable $exc = null;
+
+    /**
+     * Any string input from the user. should be null on
+     * empty. 
+     * @var ?string
+     */
+    public ?string $rawStringInput = null;
+
+    /**
+     * The raw processed int input. should be null when
+     * raw string input is null (dependency).
+     * @var ?int
+     */
+    public ?int $rawIntInput = null;
+
+    /**
+     * this is a flag to track if the current set input
+     * is empty
+     * @var bool
+     */
+    public bool $empty = false;
+
+    public function __construct()
+    {
+    }
+}
+
+class App
+{
+    /**
+     * The internal state of this application. this is where
+     * mutation goes.
+     * @var AppState
+     */
+    private AppState $state;
+
+    /**
+     * A roman converter. Converts things to roman numerals.
+     * @var RomanConverter
+     */
+    private RomanConverter $romanConverter;
+
+    /**
+     * Constructor for the app class.
+     */
+    public function __construct()
+    {
+        $this->state = new AppState();
+
+        // invoke singleton
+        $this->romanConverter = RomanConverter::instance();
+    }
+
+    /**
+     * Sets the current state's input to the new user input.
+     * @param string $userInput The user input.
+     * @return void
+     */
+    public function setInput(string $userInput)
+    {
+        $trimmedInput = trim($userInput);
+
+        if ($trimmedInput === '') {
+            // spec: this handles empty inputs which sets the values to
+            // the 'null' mode which is basically just it being empty.
+            $this->state->empty = true;
+            $this->state->rawStringInput = null;
+            $this->state->rawIntInput = 0;
+
             return;
         }
 
-        $empty = false;
+        $this->state->rawStringInput = $userInput; // this is raw. not trimmed.
 
         try {
-            $rawIntInput = (int) $rawStringInput;
-        } catch (Throwable $_exc) {
-            $exc = $_exc;
+            $integerInput = (int) ($trimmedInput);
+
+            // if we got here then that means the cast did not fail.
+            // this means it is a valid integer string.
+            $this->state->rawIntInput = $integerInput;
+        } catch (Throwable $exception) {
+            $this->state->rawIntInput = null; // sign an error occured
+            $this->state->exc = $exception;
+        }
+    }
+
+    public function displayResult()
+    {
+        // if the value is not an integer then say invalid.
+        if (!is_int($this->state->rawIntInput)) {
+            return "Invalid.";
         }
 
-    }
-}
+        // if there is no value, then tell the user to put something.
+        if ($this->state->empty) {
+            return "Please input something.";
+        }
 
+        // if the int input is not malformed. then convert and display
+        if ($this->state->rawIntInput !== null) {
+            return (string) $this->romanConverter->toRoman($this->state->rawIntInput);
+        }
 
-function toRomanOnes($number)
-{
-    $current = $number % 10; // ones place
-
-    if ($current === 0) {
-        return '';
-    } elseif ($current <= 3) {
-        return str_repeat("I", $current);
-    } elseif ($current === 4) {
-        return "IV";
-    } elseif ($current === 9) {
-        return "IX";
-    } else {
-        return "V" . str_repeat("I", $current - 5);
-    }
-}
-
-function toRomanTens($number)
-{
-    // this part is a clever trick... it gets
-    // shifts the decimal part one to the right.
-    // so now the ONE's place is the TENTH's place.
-    $tenths = floor($number / 10) % 10; // tens place
-
-    if ($tenths === 0) {
-        return '';
-    } elseif ($tenths <= 3) {
-        return str_repeat("X", $tenths);
-    } elseif ($tenths === 4) {
-        return "XL";
-    } elseif ($tenths === 9) {
-        return "XC";
-    } else {
-        return "L" . str_repeat("X", $tenths - 5);
-    }
-}
-
-function toRoman($number)
-{
-    if (!is_int($number) || $number < 0) {
-        return null; // only non-negative integers allowed
+        // else if it is malformed, get the exc (Throwable) from the
+        // current state.
+        else {
+            if ($this->state->exc !== null) {
+                return $this->state->exc->getMessage();
+            } else {
+                return "An unknown error has occured.";
+            }
+        }
     }
 
-    if ($number === 100) {
-        return 'C';
+    /**
+     * Provides access to internal state rawStringInput
+     * @return ?string
+     */
+    public function getRawInput()
+    {
+        return $this->state->rawStringInput;
     }
 
-    return toRomanTens($number) . toRomanOnes($number);
-
-}
-
-function displayResult()
-{
-    global $rawStringInput, $rawIntInput, $empty, $exc;
-    if (!is_int($rawIntInput)) {
-        return "Invalid.";
-    }
-    if ($empty) {
-        return "Please input something.";
-    }
-
-    if ($rawIntInput !== null) {
-        return (string) toRoman($rawIntInput);
-    } else {
-        if ($exc !== null) {
-            return $exc->getMessage();
-        } else {
-            return "An unknown error has occured.";
+    /**
+     * Throws the last exception.
+     * @return void
+     */
+    public function throwLastException()
+    {
+        if ($this->state->exc !== null) {
+            throw $this->state->exc;
         }
     }
 }
 
-main();
+// create the app
+$app = new App();
+
+// if user provided an input. set the input state.
+if (isset($_POST['number-input'])) {
+    $app->setInput($_POST['number-input']);
+} else {
+    // something else here. idk.
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- defines the character set (charset). UTF-8 basically means normal stuff-->
     <meta charset="UTF-8" />
+
+    <!-- metadata bout this page -->
+    <meta name="author" content="ssword-dev">
+    <meta name="description" content="a utility tool that helps you convert numbers to roman numerals">
+
+    <!--
+    DO NOT REMOVE THIS, without this, vh and vw wont work. w-screen and h-screen also wont work.
+    well actually it may work but some devices spoof the width without this.
+    -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Roman Numeral Converter</title>
     <link rel="stylesheet" href="../../static/css/index.css" />
 </head>
 
-<body class="bg-muted h-screen w-screen [*]:outline [*]:outline-1 [*]:outline-red">
-    <div id="root" class="flex flex-col items-center justify-center bg-secondary h-full w-full">
+<body class="bg-muted h-screen w-screen">
+    <!-- root wrapper (box model frame variation) -->
+    <div
+        class="flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white h-full w-full p-6">
+        <main id="main-content" class="flex flex-col justify-center items-center h-full w-full">
+            <!-- card preset container -->
+            <div data-preset="card"
+                class="self-center min-h-3/5 h-fit w-full max-w-2xl bg-primary rounded-2xl shadow-xl overflow-hidden border border-slate-700">
 
-        <main id="main-content" class="flex flex-col justify-center align-center h-full w-full">
+                <h1 class="card-title text-center text-3xl font-bold py-6 bg-slate-950/70">
+                    Roman Numeral Converter
+                </h1>
 
-            <!-- left panel: form
-            <section class="
-            flex-1 flex flex-col justify-center to-r p-4 rounded shadow
-            bg-gradient-to-r from-primary to-blend
-            ">
-                <form id="number-to-roman-converter" class="flex flex-col gap-4" method="POST">
-                    <div class="action-input flex flex-row">
+                <div class="card-body p-8 flex flex-col gap-10">
+                    <!-- input form -->
+                    <form class="action-input flex flex-row justify-center" method="POST">
                         <input name="number-input" id="number-input" type="number" min="0" max="1000"
-                            class="flex-1 border border-gray-400 rounded-l px-2 py-1"
-                            value="<?= htmlspecialchars((string) $rawIntInput ?? '') ?>" />
-                        <button type="submit"
-                            class="bg-primary border border-gray-400 border-l-0 rounded-r px-3 py-1 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-arrow-down-up">
-                                <path d="m3 16 4 4 4-4" />
-                                <path d="M7 20V4" />
-                                <path d="m21 8-4-4-4 4" />
-                                <path d="M17 4v16" />
-                            </svg>
-                        </button>
-                    </div>
-                </form>
-            </section> -->
+                            class="flex-1 border border-slate-600 bg-slate-800 text-white rounded-l-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+                            placeholder="Enter number..."
+                            value="<?= htmlspecialchars((string) ($app->getRawInput() ?? '')) ?>"
+                            aria-label="Enter a number to convert" />
 
-            <!-- right panel: output -->
-
-            <div data-preset="card" class="self-center h-3/5 w-3/5 bg-primary">
-                <h1 class="card-title">Roman Numeral Converter</h1>
-                <div class="card-body">
-
-                    <form class="action-input flex flex-row justify-center align-center" method="POST">
-                        <input name="number-input" id="number-input" type="number" min="0" max="1000"
-                            class="flex-1 border border-gray-400 rounded-l px-2 py-1"
-                            value="<?= htmlspecialchars((string) $rawIntInput ?? '') ?>" />
                         <button data-preset="button" type="submit"
-                            class="bg-primary border border-gray-400 border-l-0 rounded-r px-3 py-1 flex items-center justify-center rounded-tl-none rounded-bl-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-arrow-down-up">
+                            class="bg-blue-600 hover:bg-blue-500 transition-colors border border-slate-600 border-l-0 rounded-r-lg px-4 py-2 flex items-center justify-center"
+                            aria-label="Convert number to Roman numeral">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-arrow-down-up" role="img" aria-hidden="true">
                                 <path d="m3 16 4 4 4-4" />
                                 <path d="M7 20V4" />
                                 <path d="m21 8-4-4-4 4" />
                                 <path d="M17 4v16" />
                             </svg>
                         </button>
-                </div>
+                    </form>
 
-                <div
-                    class="flex flex-col justify-center items-center align-center self-center w-4/5 min-h-40 h-2/5 m-3 outline-main outline-1">
-                    <span class="text-[6rem]"
-                        onclick="navigator.clipboard.writeText(this.innerText);"><?= displayResult() ?></span>
-                </div>
+                    <!-- result output -->
+                    <section class="flex flex-col justify-center items-center w-full min-h-[160px] gap-4">
+                        <span id="result-output"
+                            class="text-[4rem] font-extrabold text-center text-amber-300 select-none cursor-pointer drop-shadow-lg hover:scale-105 transition-transform leading-none"
+                            title="Click to copy result" onclick="navigator.clipboard.writeText(this.innerText);">
+                            <?= $app->displayResult() ?>
+                        </span>
 
-                <div
-                    class="flex flex-col justify-center items-center align-center self-center w-4/5 min-h-40 h-2/5 m-3 outline-main outline-1">
-                    This is possible because of this source code right here
-                    <a
-                        href="https://github.com/Ssword-dev/files/blob/d4149e47c55ebe882df2ea48395e31e8d1361b49/site/view/converters/roman_numerals.php">
-                        Click to go to Source
-                    </a>
+                        <!-- fun facts -->
+                        <div class="text-sm text-slate-300 text-center max-w-md italic">
+                            <p>Fun fact: The Romans didn&#x2019;t have a symbol for zero.</p>
+                            <p>Another one: IV and IX are examples of subtractive notation, where a smaller numeral
+                                before a
+                                larger one means subtraction.</p>
+                            <p>Also: There is no standard notation for 3900+</p>
+                        </div>
+                    </section>
+
+                    <!-- source link -->
+                    <section
+                        class="flex flex-col justify-center items-center w-full text-center border-t border-slate-700 pt-6">
+                        <p class="mb-2 text-slate-300">This is possible because of this source code:</p>
+                        <a href="https://github.com/Ssword-dev/files/blob/d4149e47c55ebe882df2ea48395e31e8d1361b49/site/view/converters/roman_numerals.php"
+                            target="_blank" rel="noopener noreferrer"
+                            class="hover:text-accent underline underline-offset-4 transition-colors">
+                            Click to go to Source
+                        </a>
+                    </section>
                 </div>
-                </form>
-            </div>
         </main>
     </div>
+
 
     <!-- dev hot reload -->
     <script src="../../hot-reload-client.js"></script>
